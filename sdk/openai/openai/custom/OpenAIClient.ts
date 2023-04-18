@@ -22,6 +22,8 @@ import {
   GetCompletionsOptions,
   GetChatCompletionsOptions,
 } from "./api/index.js";
+import { getCompletionsResponse } from "./api/operations.js";
+import { getSSEs } from "./api/sse.js";
 
 function createOpenAIEndpoint(version: number): string {
   return `https://api.openai.com/v${version}`;
@@ -152,5 +154,37 @@ export class OpenAIClient {
   ): Promise<DeploymentCompletionsOptionsCompletions> {
     this.setModel(deploymentOrModelName, options);
     return getCompletions(this._client, deploymentOrModelName, promptOrOptions as any, options);
+  }
+
+  getCompletionsStreaming(
+    deploymentOrModelName: string,
+    prompt: string,
+    options?: GetCompletionsOptions
+  ): AsyncIterable<string>;
+  getCompletionsStreaming(
+    deploymentOrModelName: string,
+    prompt: string[],
+    options?: GetCompletionsOptions
+  ): AsyncIterable<string>;
+  getCompletionsStreaming(
+    deploymentOrModelName: string,
+    options?: GetCompletionsOptions
+  ): AsyncIterable<string>;
+  getCompletionsStreaming(
+    deploymentOrModelName: string,
+    promptOrOptions?: string | string[] | GetCompletionsOptions,
+    options: GetCompletionsOptions = { requestOptions: {} }
+  ): AsyncIterable<string> {
+    this.setModel(deploymentOrModelName, options);
+    const opts: GetCompletionsOptions = 
+    typeof promptOrOptions === "object" && !Array.isArray(promptOrOptions)
+      ? promptOrOptions
+      : { ...options, prompt: promptOrOptions };
+    opts.stream = true;
+    const response = getCompletionsResponse(
+      this._client,
+      deploymentOrModelName, opts
+    );
+    return getSSEs(response);
   }
 }

@@ -223,6 +223,8 @@ export class OpenAIClient {
     // (undocumented)
     getCompletions(deploymentOrModelName: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
     // (undocumented)
+    getCompletionsStreaming(_deploymentOrModelName: string, _promptOrOptions?: string | string[] | GetCompletionsOptions, _options?: GetCompletionsOptions): Promise<AsyncIterable<DeploymentCompletionsOptionsCompletions>>;
+    // (undocumented)
     getEmbeddings(deploymentOrModelName: string, input: string, options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
     // (undocumented)
     getEmbeddings(deploymentOrModelName: string, input: string[], options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;

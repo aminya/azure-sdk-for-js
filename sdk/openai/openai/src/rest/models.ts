@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
+
 /**
  * The configuration information for an embeddings request.
  * Embeddings measure the relatedness of text strings and are commonly used for search, clustering,
