@@ -2333,6 +2333,15 @@ packages:
     engines: {node: '>= 10'}
     dev: false
 
+  /@ts-morph/common/0.19.0:
+    resolution: {integrity: sha512-Unz/WHmd4pGax91rdIKWi51wnVUW11QttMEPpBiBgIewnc9UQIX7UDLxr5vRlqeByXCwhkF6VabSsI0raWcyAQ==}
+    dependencies:
+      fast-glob: 3.2.12
+      minimatch: 7.4.6
+      mkdirp: 2.1.6
+      path-browserify: 1.0.1
+    dev: false
+
   /@tsconfig/node10/1.0.9:
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
     dev: false
@@ -3496,6 +3505,10 @@ packages:
     engines: {node: '>=0.8'}
     dev: false
 
+  /code-block-writer/12.0.0:
+    resolution: {integrity: sha512-q4dMFMlXtKR3XNBHyMHt/3pwYNA69EDk00lloMOaaUMKPUXBw6lpXtbu3MMVG6/uOihGnRDOlkyqsONEUj60+w==}
+    dev: false
+
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -3991,7 +4004,7 @@ packages:
     dependencies:
       semver: 7.4.0
       shelljs: 0.8.5
-      typescript: 5.1.0-dev.20230418
+      typescript: 5.1.0-dev.20230420
     dev: false
 
   /ecdsa-sig-formatter/1.0.11:
@@ -6579,6 +6592,13 @@ packages:
       brace-expansion: 2.0.1
     dev: false
 
+  /minimatch/7.4.6:
+    resolution: {integrity: sha512-sBz8G/YjVniEz6lKPNpKxXwazJe4c19fEfV2GDMX6AjFz+MX9uDWIZW8XreVhkFW3fkIdTv/gxWr/Kks5FFAVw==}
+    engines: {node: '>=10'}
+    dependencies:
+      brace-expansion: 2.0.1
+    dev: false
+
   /minimatch/8.0.4:
     resolution: {integrity: sha512-W0Wvr9HyFXZRGIDgCicunpQ299OKXs9RgZfaukz4qAW/pJhcpUfupc9c+OObPOFueNy8VSrZgEmDtk6Kh4WzDA==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -7234,6 +7254,10 @@ packages:
   /parseurl/1.3.3:
     resolution: {integrity: sha512-CiyeOxFT/JZyN5m0z9PfXw4SCBJ6Sygz1Dpl0wqjlhDEGGBP1GnsUVEL0p63hoG1fcj3fHynXi9NYO4nWOL+qQ==}
     engines: {node: '>= 0.8'}
+    dev: false
+
+  /path-browserify/1.0.1:
+    resolution: {integrity: sha512-b7uo2UCUOYZcnF/3ID0lulOJi/bafxa1xPe7ZPsammBSpjSWQkjNxlt635YGS2MiR9GjvuXCtz2emr3jbsz98g==}
     dev: false
 
   /path-exists/3.0.0:
@@ -8654,6 +8678,13 @@ packages:
     hasBin: true
     dev: false
 
+  /ts-morph/18.0.0:
+    resolution: {integrity: sha512-Kg5u0mk19PIIe4islUI/HWRvm9bC1lHejK4S0oh1zaZ77TMZAEmQC0sHQYiu2RgCQFZKXz1fMVi/7nOOeirznA==}
+    dependencies:
+      '@ts-morph/common': 0.19.0
+      code-block-writer: 12.0.0
+    dev: false
+
   /ts-node/10.9.1_adlo6uxblhgvolyqo2x6kf22my:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
@@ -8859,8 +8890,8 @@ packages:
     hasBin: true
     dev: false
 
-  /typescript/5.1.0-dev.20230418:
-    resolution: {integrity: sha512-BfA/KV0xddF8ZCAQZxZ0FoS8p+nWKXVaa5fctXW6WNGfcYF04cXlLB6F6uf3uCVbd0iad4YdHchz3KR0722QLg==}
+  /typescript/5.1.0-dev.20230420:
+    resolution: {integrity: sha512-ytvKM7THT08QHjFP6v8kF3RtJWMQ/wWeQTIbe3kveVDcmstVrS5IZ47c9Y9GIYI2WaFVVjNu2YNLwSwIt82Fzg==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: false
@@ -17017,7 +17048,7 @@ packages:
     dev: false
 
   file:projects/dev-tool.tgz:
-    resolution: {integrity: sha512-7ZvhDpUcVe3IhwHVqEAJgEzJV/iBPAEt51lfJ+Ef+QRKpoWwJxSq+Q70SG8u7bcBcyoq6eA+mL7Ri+z1P4teFg==, tarball: file:projects/dev-tool.tgz}
+    resolution: {integrity: sha512-hDSZXchGJ3WFHw0RJbMy9ZrAY6lFJkv79e+vEPM9uf2aFdDTDllkc8GOphHTti9f+Mh940kW0GpvD5ZTR37faQ==, tarball: file:projects/dev-tool.tgz}
     name: '@rush-temp/dev-tool'
     version: 0.0.0
     dependencies:
@@ -17063,6 +17094,7 @@ packages:
       rollup-plugin-sourcemaps: 0.6.3_c43y4oaxxwie3ialrfuzfwwhqq
       rollup-plugin-visualizer: 5.9.0_rollup@2.79.1
       semver: 7.4.0
+      ts-morph: 18.0.0
       ts-node: 10.9.1_adlo6uxblhgvolyqo2x6kf22my
       tslib: 2.5.0
       typescript: 5.0.4
@@ -19965,7 +19997,7 @@ packages:
     dev: false
 
   file:projects/template.tgz:
-    resolution: {integrity: sha512-0wlhMPscSTP4/QUL2sOJAh1/82gAobmvkvQ0u/aJC18aYACv8wK91n2/NCQ5BIimrstfr65QkZ0ZT52iKwD8dw==, tarball: file:projects/template.tgz}
+    resolution: {integrity: sha512-7FkAIYRwLO/bh2jLFj8gHvLmQTBFUqTOSOsUuBs+ktkNQUZYCOxgCxrGOyjvN7LkbbwZDvc6DGSYGA81MhvirQ==, tarball: file:projects/template.tgz}
     name: '@rush-temp/template'
     version: 0.0.0
     dependencies:
@@ -19974,6 +20006,7 @@ packages:
       '@types/chai': 4.3.4
       '@types/mocha': 7.0.2
       '@types/node': 14.18.42
+      autorest: 3.6.3
       chai: 4.3.7
       cross-env: 7.0.3
       dotenv: 16.0.3
