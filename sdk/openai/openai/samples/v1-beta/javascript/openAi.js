@@ -14,14 +14,14 @@ require("dotenv").config();
 const openApiKey = process.env["OPENAI_API_KEY"] || "<api key>";
 const model = process.env["MODEL_NAME"] || "<model name>";
 
-const chat = [{ role: "user", content: "Hello, how are you?" }];
+const doc = "Hello world!";
 
 async function main() {
   console.log("== Get completions Sample ==");
 
   const client = new OpenAIClient(openApiKey);
 
-  const result = await client.getChatCompletions(model, chat);
+  const result = await client.getCompletions(model, doc);
 
   console.log(result?.choices?.[0].text);
 }

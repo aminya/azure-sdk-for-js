@@ -15,6 +15,7 @@ These sample programs show how to use the JavaScript client libraries for Azure 
 
 | **File Name**                                     | **Description**     |
 | ------------------------------------------------- | ------------------- |
+| [chatCompletions.js][chatcompletions]             | test getCompletions |
 | [chatCompletionsStream.js][chatcompletionsstream] | test getCompletions |
 | [completions.js][completions]                     | test getCompletions |
 | [completionsStream.js][completionsstream]         | test getCompletions |
@@ -47,19 +48,20 @@ npm install
 3. Run whichever samples you like (note that some samples may require additional setup, see the table above):
 
 ```bash
-node chatCompletionsStream.js
+node chatCompletions.js
 ```
 
 Alternatively, run a single sample with the correct environment variables set (setting up the `.env` file is not required if you do this), for example (cross-platform):
 
 ```bash
-npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" DEPLOYMENT_ID="<deployment id>" node chatCompletionsStream.js
+npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" DEPLOYMENT_ID="<deployment id>" node chatCompletions.js
 ```
 
 ## Next Steps
 
 Take a look at our [API Documentation][apiref] for more information about the APIs that are available in the clients.
 
+[chatcompletions]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/chatCompletions.js
 [chatcompletionsstream]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/chatCompletionsStream.js
 [completions]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/completions.js
 [completionsstream]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/completionsStream.js

@@ -15,6 +15,7 @@ These sample programs show how to use the TypeScript client libraries for Azure 
 
 | **File Name**                                     | **Description**     |
 | ------------------------------------------------- | ------------------- |
+| [chatCompletions.ts][chatcompletions]             | test getCompletions |
 | [chatCompletionsStream.ts][chatcompletionsstream] | test getCompletions |
 | [completions.ts][completions]                     | test getCompletions |
 | [completionsStream.ts][completionsstream]         | test getCompletions |
@@ -59,19 +60,20 @@ npm run build
 4. Run whichever samples you like (note that some samples may require additional setup, see the table above):
 
 ```bash
-node dist/chatCompletionsStream.js
+node dist/chatCompletions.js
 ```
 
 Alternatively, run a single sample with the correct environment variables set (setting up the `.env` file is not required if you do this), for example (cross-platform):
 
 ```bash
-npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" DEPLOYMENT_ID="<deployment id>" node dist/chatCompletionsStream.js
+npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" DEPLOYMENT_ID="<deployment id>" node dist/chatCompletions.js
 ```
 
 ## Next Steps
 
 Take a look at our [API Documentation][apiref] for more information about the APIs that are available in the clients.
 
+[chatcompletions]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/typescript/src/chatCompletions.ts
 [chatcompletionsstream]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/typescript/src/chatCompletionsStream.ts
 [completions]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/typescript/src/completions.ts
 [completionsstream]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/typescript/src/completionsStream.ts
