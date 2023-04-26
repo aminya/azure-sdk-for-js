@@ -1,6 +1,15 @@
 # OpenAI REST client library for JavaScript
 
-Azure OpenAI APIs for completions and search
+The Azure OpenAI client library for JavaScript is an adaptation of OpenAI's REST APIs that provides an idiomatic interface
+and rich integration with the rest of the Azure SDK ecosystem. It can connect to Azure OpenAI resources *or* to the
+non-Azure OpenAI inference endpoint, making it a great choice for even non-Azure OpenAI development.
+
+Use the client library for Azure OpenAI to:
+
+* [Create a completion for text][msdocs_openai_completion]
+* [Create a text embedding for comparisons][msdocs_openai_embedding]
+
+Azure OpenAI is a managed service that allows developers to deploy, tune, and generate content from OpenAI models on Azure resources.
 
 **Please rely heavily on our [REST client docs](https://github.com/Azure/azure-sdk-for-js/blob/main/documentation/rest-clients.md) to use this library**
 
@@ -54,3 +63,10 @@ setLogLevel("info");
 ```
 
 For more detailed instructions on how to enable logs, you can look at the [@azure/logger package docs](https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/core/logger).
+
+
+<!-- LINKS -->
+[azure_identity]: https://learn.microsoft.com/javascript/api/overview/azure/identity-readme?view=azure-node-latest
+[azure_identity_dac]: https://learn.microsoft.com/javascript/api/@azure/identity/defaultazurecredential?view=azure-node-latest
+[msdocs_openai_completion]: https://learn.microsoft.com/azure/cognitive-services/openai/how-to/completions
+[msdocs_openai_embedding]: https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings
