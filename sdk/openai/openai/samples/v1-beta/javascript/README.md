@@ -13,10 +13,12 @@ urlFragment: ai-openai-javascript-beta
 
 These sample programs show how to use the JavaScript client libraries for Azure OpenAI in some common scenarios.
 
-| **File Name**                       | **Description**     |
-| ----------------------------------- | ------------------- |
-| [getCompletions.js][getcompletions] | test getCompletions |
-| [openAi.js][openai]                 | test getCompletions |
+| **File Name**                                     | **Description**     |
+| ------------------------------------------------- | ------------------- |
+| [chatCompletionsStream.js][chatcompletionsstream] | test getCompletions |
+| [completions.js][completions]                     | test getCompletions |
+| [completionsStream.js][completionsstream]         | test getCompletions |
+| [openAi.js][openai]                               | test getCompletions |
 
 ## Prerequisites
 
@@ -45,20 +47,22 @@ npm install
 3. Run whichever samples you like (note that some samples may require additional setup, see the table above):
 
 ```bash
-node getCompletions.js
+node chatCompletionsStream.js
 ```
 
 Alternatively, run a single sample with the correct environment variables set (setting up the `.env` file is not required if you do this), for example (cross-platform):
 
 ```bash
-npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" MODEL_NAME="<model name>" node getCompletions.js
+npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" DEPLOYMENT_ID="<deployment id>" node chatCompletionsStream.js
 ```
 
 ## Next Steps
 
 Take a look at our [API Documentation][apiref] for more information about the APIs that are available in the clients.
 
-[getcompletions]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/getCompletions.js
+[chatcompletionsstream]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/chatCompletionsStream.js
+[completions]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/completions.js
+[completionsstream]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/completionsStream.js
 [openai]: https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/openai/openai/samples/v1-beta/javascript/openAi.js
 [apiref]: https://docs.microsoft.com/javascript/api/@azure/ai-openai
 [freesub]: https://azure.microsoft.com/free/

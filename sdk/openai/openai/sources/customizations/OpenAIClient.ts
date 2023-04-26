@@ -22,7 +22,12 @@ import {
   GetCompletionsOptions,
   GetChatCompletionsOptions,
 } from "./api/index.js";
-import { getCompletionsResponse } from "./api/operations.js";
+import {
+  getChatCompletionsResponse,
+  getChatCompletionsResult,
+  getCompletionsResponse,
+  getCompletionsResult,
+} from "./api/operations.js";
 import { getSSEs } from "./api/sse.js";
 
 function createOpenAIEndpoint(version: number): string {
@@ -32,6 +37,13 @@ function createOpenAIEndpoint(version: number): string {
 function isCred(cred: Record<string, any>): cred is TokenCredential | KeyCredential {
   return isTokenCredential(cred) || cred.key !== undefined;
 }
+
+export type CompletionsStream = AsyncIterable<
+  Omit<DeploymentCompletionsOptionsCompletions, "usage">
+>;
+export type ChatCompletionsStream = AsyncIterable<
+  Omit<DeploymentChatCompletionsOptionsChatCompletions, "usage">
+>;
 
 export class OpenAIClient {
   private _client: OpenAIContext;
@@ -87,7 +99,7 @@ export class OpenAIClient {
                   sendRequest: (request, next) => {
                     const obj = new URL(request.url);
                     const parts = obj.pathname.split("/");
-                    obj.pathname = `/${parts[1]}/${parts[parts.length - 1]}`;
+                    obj.pathname = `/${parts[1]}/${parts.slice(4).join("/")}`;
                     obj.searchParams.delete("api-version");
                     request.url = obj.toString();
                     return next(request);
@@ -107,12 +119,7 @@ export class OpenAIClient {
 
   getEmbeddings(
     deploymentOrModelName: string,
-    input: string,
-    options?: GetEmbeddingsOptions
-  ): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
-  getEmbeddings(
-    deploymentOrModelName: string,
-    input: string[],
+    input: string | string[],
     options?: GetEmbeddingsOptions
   ): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
   getEmbeddings(
@@ -135,12 +142,7 @@ export class OpenAIClient {
 
   getCompletions(
     deploymentOrModelName: string,
-    prompt: string,
-    options?: GetCompletionsOptions
-  ): Promise<DeploymentCompletionsOptionsCompletions>;
-  getCompletions(
-    deploymentOrModelName: string,
-    prompt: string[],
+    prompt: string | string[],
     options?: GetCompletionsOptions
   ): Promise<DeploymentCompletionsOptionsCompletions>;
   getCompletions(
@@ -158,33 +160,41 @@ export class OpenAIClient {
 
   getCompletionsStreaming(
     deploymentOrModelName: string,
-    prompt: string,
+    prompt: string | string[],
     options?: GetCompletionsOptions
-  ): AsyncIterable<string>;
-  getCompletionsStreaming(
-    deploymentOrModelName: string,
-    prompt: string[],
-    options?: GetCompletionsOptions
-  ): AsyncIterable<string>;
+  ): Promise<CompletionsStream>;
   getCompletionsStreaming(
     deploymentOrModelName: string,
     options?: GetCompletionsOptions
-  ): AsyncIterable<string>;
+  ): Promise<CompletionsStream>;
   getCompletionsStreaming(
     deploymentOrModelName: string,
     promptOrOptions?: string | string[] | GetCompletionsOptions,
     options: GetCompletionsOptions = { requestOptions: {} }
-  ): AsyncIterable<string> {
+  ): Promise<CompletionsStream> {
     this.setModel(deploymentOrModelName, options);
-    const opts: GetCompletionsOptions = 
-    typeof promptOrOptions === "object" && !Array.isArray(promptOrOptions)
-      ? promptOrOptions
-      : { ...options, prompt: promptOrOptions };
+    const opts: GetCompletionsOptions =
+      typeof promptOrOptions === "object" && !Array.isArray(promptOrOptions)
+        ? promptOrOptions
+        : { ...options, prompt: promptOrOptions };
     opts.stream = true;
-    const response = getCompletionsResponse(
+    const response = getCompletionsResponse(this._client, deploymentOrModelName, opts);
+    return getSSEs(response, getCompletionsResult);
+  }
+
+  getChatCompletionsStreaming(
+    deploymentOrModelName: string,
+    messages: ChatMessage[],
+    options: GetChatCompletionsOptions = { requestOptions: {} }
+  ): Promise<ChatCompletionsStream> {
+    this.setModel(deploymentOrModelName, options);
+    options.stream = true;
+    const response = getChatCompletionsResponse(
       this._client,
-      deploymentOrModelName, opts
+      messages,
+      deploymentOrModelName,
+      options
     );
-    return getSSEs(response);
+    return getSSEs(response, getChatCompletionsResult);
   }
 }

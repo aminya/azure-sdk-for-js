@@ -1,29 +1,29 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+export { OpenAIContext, createOpenAI } from "./OpenAIContext.js";
 export {
-  DeploymentEmbeddingsOptionsEmbeddings,
-  EmbeddingItem,
-  EmbeddingsUsage,
-  EmbeddingsOptions,
-  DeploymentCompletionsOptionsCompletions,
-  Choice,
-  CompletionsLogProbabilityModel,
-  CompletionsFinishReason,
-  CompletionsUsage,
-  CompletionsOptions,
-  DeploymentChatCompletionsOptionsChatCompletions,
   ChatChoice,
+  ChatCompletionsOptions,
   ChatMessage,
   ChatRole,
-  ChatCompletionsOptions,
+  Choice,
+  CompletionsFinishReason,
+  CompletionsLogProbabilityModel,
+  CompletionsOptions,
+  CompletionsUsage,
+  DeploymentChatCompletionsOptionsChatCompletions,
+  DeploymentCompletionsOptionsCompletions,
+  DeploymentEmbeddingsOptionsEmbeddings,
+  EmbeddingItem,
+  EmbeddingsOptions,
+  EmbeddingsUsage,
 } from "./models.js";
-export { createOpenAI, OpenAIContext } from "./OpenAIContext.js";
 export {
-  getEmbeddings,
-  getCompletions,
-  getChatCompletions,
-  GetEmbeddingsOptions,
-  GetCompletionsOptions,
   GetChatCompletionsOptions,
+  GetCompletionsOptions,
+  GetEmbeddingsOptions,
+  getChatCompletions,
+  getCompletions,
+  getEmbeddings,
 } from "./operations.js";

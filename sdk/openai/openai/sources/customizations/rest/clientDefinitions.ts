@@ -31,9 +31,7 @@ export interface GetCompletions {
    */
   post(
     options?: GetCompletionsParameters
-  ): StreamableMethod<
-    GetCompletions200Response | GetCompletionsDefaultResponse
-  >;
+  ): StreamableMethod<GetCompletions200Response | GetCompletionsDefaultResponse>;
 }
 
 export interface GetChatCompletions {
@@ -44,27 +42,16 @@ export interface GetChatCompletions {
    */
   post(
     options?: GetChatCompletionsParameters
-  ): StreamableMethod<
-    GetChatCompletions200Response | GetChatCompletionsDefaultResponse
-  >;
+  ): StreamableMethod<GetChatCompletions200Response | GetChatCompletionsDefaultResponse>;
 }
 
 export interface Routes {
   /** Resource for '/deployments/\{deploymentId\}/embeddings' has methods for the following verbs: post */
-  (
-    path: "/deployments/{deploymentId}/embeddings",
-    deploymentId: string
-  ): GetEmbeddings;
+  (path: "/deployments/{deploymentId}/embeddings", deploymentId: string): GetEmbeddings;
   /** Resource for '/deployments/\{deploymentId\}/completions' has methods for the following verbs: post */
-  (
-    path: "/deployments/{deploymentId}/completions",
-    deploymentId: string
-  ): GetCompletions;
+  (path: "/deployments/{deploymentId}/completions", deploymentId: string): GetCompletions;
   /** Resource for '/deployments/\{deploymentId\}/chat/completions' has methods for the following verbs: post */
-  (
-    path: "/deployments/{deploymentId}/chat/completions",
-    deploymentId: string
-  ): GetChatCompletions;
+  (path: "/deployments/{deploymentId}/chat/completions", deploymentId: string): GetChatCompletions;
 }
 
 export type OpenAIContext = Client & {

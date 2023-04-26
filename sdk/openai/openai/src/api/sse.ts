@@ -4,15 +4,6 @@
 import { StreamableMethod } from "@azure-rest/core-client";
 import { getStream } from "./getStream.js";
 
-async function* streamToEvents<T>(
-  stream: AsyncIterable<string>,
-  processChunk: (chunk: string) => T[]
-): AsyncIterable<T> {
-  for await (const chunk of stream) {
-    yield* processChunk(chunk);
-  }
-}
-
 export async function getSSEs<TResponse, TEvent>(
   response: StreamableMethod<TResponse>,
   toEvent: (obj: Record<string, any>) => TEvent
@@ -27,11 +18,20 @@ export async function getSSEs<TResponse, TEvent>(
   );
 }
 
+async function* streamToEvents<T>(
+  stream: AsyncIterable<string>,
+  processChunk: (chunk: string) => T[]
+): AsyncIterable<T> {
+  for await (const chunk of stream) {
+    yield* processChunk(chunk);
+  }
+}
+
 function errorWithCause(message: string, cause: Error): Error {
   return new Error(
     message,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
+
     { cause }
   );
 }

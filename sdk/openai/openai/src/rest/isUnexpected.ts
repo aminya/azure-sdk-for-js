@@ -2,20 +2,23 @@
 // Licensed under the MIT license.
 
 import {
-  GetEmbeddings200Response,
-  GetEmbeddingsDefaultResponse,
-  GetCompletions200Response,
-  GetCompletionsDefaultResponse,
   GetChatCompletions200Response,
   GetChatCompletionsDefaultResponse,
+  GetCompletions200Response,
+  GetCompletionsDefaultResponse,
+  GetEmbeddings200Response,
+  GetEmbeddingsDefaultResponse,
 } from "./responses.js";
 
-const responseMap: Record<string, string[]> = {
-  "POST /deployments/{deploymentId}/embeddings": ["200"],
-  "POST /deployments/{deploymentId}/completions": ["200"],
-  "POST /deployments/{deploymentId}/chat/completions": ["200"],
-};
-
+export function isUnexpected(
+  response: GetEmbeddings200Response | GetEmbeddingsDefaultResponse
+): response is GetEmbeddingsDefaultResponse;
+export function isUnexpected(
+  response: GetCompletions200Response | GetCompletionsDefaultResponse
+): response is GetCompletionsDefaultResponse;
+export function isUnexpected(
+  response: GetChatCompletions200Response | GetChatCompletionsDefaultResponse
+): response is GetChatCompletionsDefaultResponse;
 export function isUnexpected(
   response: GetEmbeddings200Response | GetEmbeddingsDefaultResponse
 ): response is GetEmbeddingsDefaultResponse;
@@ -44,19 +47,14 @@ export function isUnexpected(
   if (!pathDetails) {
     pathDetails = getParametrizedPathSuccess(method, url.pathname);
   }
+
   return !pathDetails.includes(response.status);
 }
 
 function getParametrizedPathSuccess(method: string, path: string): string[] {
   const pathParts = path.split("/");
-
-  // Traverse list to match the longest candidate
-  // matchedLen: the length of candidate path
-  // matchedValue: the matched status code array
   let matchedLen = -1,
     matchedValue: string[] = [];
-
-  // Iterate the responseMap to find a match
   for (const [key, value] of Object.entries(responseMap)) {
     // Extracting the path from the map key which is in format
     // GET /path/foo
@@ -69,24 +67,17 @@ function getParametrizedPathSuccess(method: string, path: string): string[] {
 
     // track if we have found a match to return the values found.
     let found = true;
-    for (
-      let i = candidateParts.length - 1, j = pathParts.length - 1;
-      i >= 1 && j >= 1;
-      i--, j--
-    ) {
-      if (
-        candidateParts[i]?.startsWith("{") &&
-        candidateParts[i]?.indexOf("}") !== -1
-      ) {
+    for (let i = candidateParts.length - 1, j = pathParts.length - 1; i >= 1 && j >= 1; i--, j--) {
+      if (candidateParts[i]?.startsWith("{") && candidateParts[i]?.indexOf("}") !== -1) {
         const start = candidateParts[i]!.indexOf("}") + 1,
           end = candidateParts[i]?.length;
         // If the current part of the candidate is a "template" part
         // Try to use the suffix of pattern to match the path
         // {guid} ==> $
         // {guid}:export ==> :export$
-        const isMatched = new RegExp(
-          `${candidateParts[i]?.slice(start, end)}`
-        ).test(pathParts[j] || "");
+        const isMatched = new RegExp(`${candidateParts[i]?.slice(start, end)}`).test(
+          pathParts[j] || ""
+        );
 
         if (!isMatched) {
           found = false;
@@ -119,3 +110,9 @@ function getPathFromMapKey(mapKey: string): string {
   const pathStart = mapKey.indexOf("/");
   return mapKey.slice(pathStart);
 }
+
+const responseMap: Record<string, string[]> = {
+  "POST /deployments/{deploymentId}/embeddings": ["200"],
+  "POST /deployments/{deploymentId}/completions": ["200"],
+  "POST /deployments/{deploymentId}/chat/completions": ["200"],
+};

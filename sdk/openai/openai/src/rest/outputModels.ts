@@ -1,6 +1,5 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
-
 /** A specific deployment */
 export interface DeploymentOutput {
   /** deployment id of the deployed model */

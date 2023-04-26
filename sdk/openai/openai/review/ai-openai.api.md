@@ -160,23 +160,17 @@ export interface GetChatCompletionsOptions extends RequestOptions {
     user?: string;
 }
 
-// @public (undocumented)
+// @public
 export function getCompletions(context: OpenAIContext, deploymentId: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
 
-// @public (undocumented)
-export function getCompletions(context: OpenAIContext, deploymentId: string, prompt: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
+// @public
+export function getCompletions(context: OpenAIContext, deploymentId: string, prompt: string | string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
 
-// @public (undocumented)
-export function getCompletions(context: OpenAIContext, deploymentId: string, prompt: string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
-
-// @public (undocumented)
+// @public
 export function getCompletions(context: OpenAIContext, deploymentId: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
 
-// @public (undocumented)
-export function getCompletions(context: OpenAIContext, deploymentId: string, prompt: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
-
-// @public (undocumented)
-export function getCompletions(context: OpenAIContext, deploymentId: string, prompt: string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
+// @public
+export function getCompletions(context: OpenAIContext, deploymentId: string, prompt: string | string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
 
 // @public (undocumented)
 export interface GetCompletionsOptions extends RequestOptions {
@@ -216,18 +210,22 @@ export class OpenAIClient {
     constructor(endpoint: string, credential: KeyCredential | TokenCredential, options?: ClientOptions);
     // (undocumented)
     getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<DeploymentChatCompletionsOptionsChatCompletions>;
+    // Warning: (ae-forgotten-export) The symbol "ChatCompletionsStream" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
-    getCompletions(deploymentOrModelName: string, prompt: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
+    getChatCompletionsStreaming(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<ChatCompletionsStream>;
     // (undocumented)
-    getCompletions(deploymentOrModelName: string, prompt: string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
+    getCompletions(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
     // (undocumented)
     getCompletions(deploymentOrModelName: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
+    // Warning: (ae-forgotten-export) The symbol "CompletionsStream" needs to be exported by the entry point index.d.ts
+    //
     // (undocumented)
-    getCompletionsStreaming(_deploymentOrModelName: string, _promptOrOptions?: string | string[] | GetCompletionsOptions, _options?: GetCompletionsOptions): Promise<AsyncIterable<DeploymentCompletionsOptionsCompletions>>;
+    getCompletionsStreaming(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptions): Promise<CompletionsStream>;
     // (undocumented)
-    getEmbeddings(deploymentOrModelName: string, input: string, options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
+    getCompletionsStreaming(deploymentOrModelName: string, options?: GetCompletionsOptions): Promise<CompletionsStream>;
     // (undocumented)
-    getEmbeddings(deploymentOrModelName: string, input: string[], options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
+    getEmbeddings(deploymentOrModelName: string, input: string | string[], options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
 }
 
 // @public (undocumented)

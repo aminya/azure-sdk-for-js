@@ -2,32 +2,28 @@
 // Licensed under the MIT License.
 
 /**
- *
- *
  * @summary test getCompletions
- * @azsdk-weight 100
  */
 
-import { OpenAIClient } from "@azure/ai-openai";
-import { AzureKeyCredential } from "@azure/core-auth";
+const { OpenAIClient } = require("@azure/ai-openai");
+const { AzureKeyCredential } = require("@azure/core-auth");
 
 // Load the .env file if it exists
-import * as dotenv from "dotenv";
-dotenv.config();
+require("dotenv").config();
 
 // You will need to set these environment variables or edit the following values
-const endpoint = process.env["ENDPOINT"] || "<openai endpoint>";
+const endpoint = process.env["ENDPOINT"] || "<endpoint>";
 const azureApiKey = process.env["AZURE_API_KEY"] || "<api key>";
-const model = process.env["MODEL_NAME"] || "<model name>";
+const deploymentId = process.env["DEPLOYMENT_ID"] || "<deployment id>";
 
 const doc = "Hello world!";
 
-export async function main() {
+async function main() {
   console.log("== Get completions Sample ==");
 
   const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
 
-  const result = await client.getCompletions(model, doc);
+  const result = await client.getCompletions(deploymentId, doc);
 
   console.log(result?.choices?.[0].text);
 }
@@ -35,3 +31,5 @@ export async function main() {
 main().catch((err) => {
   console.error("The sample encountered an error:", err);
 });
+
+module.exports = { main };

@@ -3,12 +3,7 @@
  * Licensed under the MIT License.
  */
 
-import {
-  env,
-  Recorder,
-  RecorderStartOptions,
-  isPlaybackMode,
-} from "@azure-tools/test-recorder";
+import { env, Recorder, RecorderStartOptions, isPlaybackMode } from "@azure-tools/test-recorder";
 import { assert } from "chai";
 import { Context } from "mocha";
 import { OpenAIClient } from "../src/OpenAIClient.js";
@@ -25,7 +20,7 @@ const replaceableVariables: Record<string, string> = {
 };
 
 const recorderOptions: RecorderStartOptions = {
-  envSetupForPlayback: replaceableVariables
+  envSetupForPlayback: replaceableVariables,
 };
 
 export const testPollingOptions = {
@@ -42,11 +37,15 @@ describe("openaiclient test", () => {
   beforeEach(async function (this: Context) {
     recorder = new Recorder(this.currentTest);
     await recorder.start(recorderOptions);
-    endpoint = env.ENDPOINT || '';
-    modelName = env.MODEL_NAME || '';
-    azureApiKey = env.AZURE_API_KEY || '';
+    endpoint = env.ENDPOINT || "";
+    modelName = env.MODEL_NAME || "";
+    azureApiKey = env.AZURE_API_KEY || "";
     // This is an example of how the environment variables are used
-    client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey), recorder.configureClientOptions({}));
+    client = new OpenAIClient(
+      endpoint,
+      new AzureKeyCredential(azureApiKey),
+      recorder.configureClientOptions({})
+    );
   });
 
   afterEach(async function () {
@@ -59,4 +58,4 @@ describe("openaiclient test", () => {
     assert.isNotNull(completions.choices);
     assert.equal(completions.choices?.length, 1);
   });
-})
+});

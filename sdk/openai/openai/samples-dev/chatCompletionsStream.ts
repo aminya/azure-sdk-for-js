@@ -2,7 +2,10 @@
 // Licensed under the MIT License.
 
 /**
+ *
+ *
  * @summary test getCompletions
+ * @azsdk-weight 100
  */
 
 import { OpenAIClient } from "@azure/ai-openai";
@@ -13,20 +16,21 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 // You will need to set these environment variables or edit the following values
-const endpoint = process.env["ENDPOINT"] || "<openai endpoint>";
+const endpoint = process.env["ENDPOINT"] || "<endpoint>";
 const azureApiKey = process.env["AZURE_API_KEY"] || "<api key>";
-const model = process.env["MODEL_NAME"] || "<model name>";
+const deploymentId = process.env["DEPLOYMENT_ID"] || "<deployment id>";
 
-const doc = "Hello world!";
+const chat = [{ role: "user", content: "Hello, how are you?" }];
 
 export async function main() {
   console.log("== Get completions Sample ==");
 
   const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
+  const events = await client.getChatCompletionsStreaming(deploymentId, chat);
 
-  const result = await client.getCompletions(model, doc);
-
-  console.log(result?.choices?.[0].text);
+  for await (const event of events) {
+    console.log(event);
+  }
 }
 
 main().catch((err) => {

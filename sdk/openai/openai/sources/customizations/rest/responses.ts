@@ -3,11 +3,7 @@
 
 import { RawHttpHeaders } from "@azure/core-rest-pipeline";
 import { HttpResponse, ErrorResponse } from "@azure-rest/core-client";
-import {
-  EmbeddingsOutput,
-  CompletionsOutput,
-  ChatCompletionsOutput,
-} from "./outputModels.js";
+import { EmbeddingsOutput, CompletionsOutput, ChatCompletionsOutput } from "./outputModels.js";
 
 /** The request has succeeded. */
 export interface GetEmbeddings200Response extends HttpResponse {
