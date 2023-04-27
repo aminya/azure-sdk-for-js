@@ -28,3 +28,4 @@ export {
 } from "./api/operations.js";
 export { OpenAIClient } from "./OpenAIClient.js";
 export { ClientOptions, RequestOptions } from "./common/interfaces.js";
+export { OpenAIKeyCredential } from "./OpenAIKeyCredential.js";

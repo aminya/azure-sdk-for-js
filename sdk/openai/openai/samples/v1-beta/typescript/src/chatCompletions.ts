@@ -25,7 +25,7 @@ export async function main() {
   const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
 
   const result = await client.getChatCompletions(deploymentId, chat);
-  
+
   console.log(result.choices?.[0].message);
 }
 

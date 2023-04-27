@@ -28,3 +28,4 @@ export {
   getEmbeddings,
 } from "./api/operations.js";
 export { ClientOptions, RequestOptions } from "./common/interfaces.js";
+export { OpenAIKeyCredential } from "./OpenAIKeyCredential.js";

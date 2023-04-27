@@ -8,7 +8,9 @@
 const { OpenAIClient } = require("@azure/ai-openai");
 
 // Load the .env file if it exists
-require("dotenv").config();
+const dotenv = require("dotenv");
+const { OpenAIKeyCredential } = require("@azure/ai-openai");
+dotenv.config();
 
 // You will need to set these environment variables or edit the following values
 const openApiKey = process.env["OPENAI_API_KEY"] || "<api key>";
@@ -19,7 +21,7 @@ const doc = "Hello world!";
 async function main() {
   console.log("== Get completions Sample ==");
 
-  const client = new OpenAIClient(openApiKey);
+  const client = new OpenAIClient(new OpenAIKeyCredential(openApiKey));
 
   const result = await client.getCompletions(model, doc);
 

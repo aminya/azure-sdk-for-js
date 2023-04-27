@@ -1,12 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import {
-  AzureKeyCredential,
-  KeyCredential,
-  TokenCredential,
-  isTokenCredential,
-} from "@azure/core-auth";
+import { KeyCredential, TokenCredential, isTokenCredential } from "@azure/core-auth";
 import {
   ChatMessage,
   DeploymentChatCompletionsOptionsChatCompletions,
@@ -42,14 +37,14 @@ export class OpenAIClient {
   private _isAzure = false;
 
   /** Azure OpenAI APIs for completions and search */
-  constructor(openAiKey: string, options?: ClientOptions);
+  constructor(openAiKey: KeyCredential, options?: ClientOptions);
   constructor(
     endpoint: string,
     credential: KeyCredential | TokenCredential,
     options?: ClientOptions
   );
   constructor(
-    endpointOrOpenAiKey: string,
+    endpointOrOpenAiKey: string | KeyCredential,
     credOrOptions: KeyCredential | TokenCredential | ClientOptions = {},
     options: ClientOptions = {}
   ) {
@@ -57,17 +52,13 @@ export class OpenAIClient {
     let endpoint: string;
     let cred: KeyCredential | TokenCredential;
     if (isCred(credOrOptions)) {
-      endpoint = endpointOrOpenAiKey;
+      endpoint = endpointOrOpenAiKey as string;
       cred = credOrOptions;
       opts = options;
       this._isAzure = true;
     } else {
       endpoint = createOpenAIEndpoint(1);
-      cred = new AzureKeyCredential(
-        endpointOrOpenAiKey.startsWith("Bearer ")
-          ? endpointOrOpenAiKey
-          : `Bearer ${endpointOrOpenAiKey}`
-      );
+      cred = endpointOrOpenAiKey as KeyCredential;
       const { credentials, ...restOpts } = credOrOptions;
       opts = {
         credentials: {

@@ -9,6 +9,7 @@ import { OpenAIClient } from "@azure/ai-openai";
 
 // Load the .env file if it exists
 import * as dotenv from "dotenv";
+import { OpenAIKeyCredential } from "@azure/ai-openai";
 dotenv.config();
 
 // You will need to set these environment variables or edit the following values
@@ -20,7 +21,7 @@ const doc = "Hello world!";
 export async function main() {
   console.log("== Get completions Sample ==");
 
-  const client = new OpenAIClient(openApiKey);
+  const client = new OpenAIClient(new OpenAIKeyCredential(openApiKey));
 
   const result = await client.getCompletions(model, doc);
 

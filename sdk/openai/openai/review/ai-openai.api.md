@@ -206,7 +206,7 @@ export interface GetEmbeddingsOptions extends RequestOptions {
 
 // @public (undocumented)
 export class OpenAIClient {
-    constructor(openAiKey: string, options?: ClientOptions);
+    constructor(openAiKey: KeyCredential, options?: ClientOptions);
     constructor(endpoint: string, credential: KeyCredential | TokenCredential, options?: ClientOptions);
     // (undocumented)
     getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<DeploymentChatCompletionsOptionsChatCompletions>;
@@ -226,6 +226,13 @@ export class OpenAIClient {
     getCompletionsStreaming(deploymentOrModelName: string, options?: GetCompletionsOptions): Promise<CompletionsStream>;
     // (undocumented)
     getEmbeddings(deploymentOrModelName: string, input: string | string[], options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
+}
+
+// @public
+export class OpenAIKeyCredential implements KeyCredential {
+    constructor(key: string);
+    get key(): string;
+    update(newKey: string): void;
 }
 
 // @public (undocumented)
