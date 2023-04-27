@@ -92,7 +92,7 @@ export class OpenAIClient {
                   sendRequest: (request, next) => {
                     const obj = new URL(request.url);
                     const parts = obj.pathname.split("/");
-                    obj.pathname = `/${parts[1]}/${parts.slice(4).join("/")}`;
+                    obj.pathname = `/${parts[1]}/${parts.slice(5).join("/")}`;
                     obj.searchParams.delete("api-version");
                     request.url = obj.toString();
                     return next(request);
