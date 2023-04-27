@@ -19,6 +19,17 @@ Key links:
 
 ## Getting started
 
+```javascript
+const { OpenAIClient } = require("@azure/ai-openai");
+const { AzureKeyCredential } = require("@azure/core-auth");
+
+const client = new OpenAIClient(
+  "https://<resource name>.openai.azure.com/", 
+  new AzureKeyCredential("<Azure API key>")
+);
+const { id, created, choices, usage } = await client.getCompletions("<deployment ID>", "YOUR PROMPT HERE");
+```
+
 ### Currently supported environments
 
 - LTS versions of Node.js
@@ -49,6 +60,13 @@ can be used to authenticate the client.
 
 Set the values of the client ID, tenant ID, and client secret of the AAD application as environment variables:
 AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_CLIENT_SECRET
+
+```js
+const { OpenAIClient } = require("@azure/ai-openai");
+const { DefaultAzureCredential } = require("@azure/identity");
+
+const client = new OpenAIClient("<endpoint>", new DefaultAzureCredential());
+```
 
 ## Troubleshooting
 
