@@ -7,6 +7,7 @@ non-Azure OpenAI inference endpoint, making it a great choice for even non-Azure
 Use the client library for Azure OpenAI to:
 
 * [Create a completion for text][msdocs_openai_completion]
+* [Create a chat completion with ChatGPT][msdocs_openai_chat_completion]
 * [Create a text embedding for comparisons][msdocs_openai_embedding]
 
 Azure OpenAI is a managed service that allows developers to deploy, tune, and generate content from OpenAI models on Azure resources.
@@ -68,6 +69,46 @@ const { DefaultAzureCredential } = require("@azure/identity");
 const client = new OpenAIClient("<endpoint>", new DefaultAzureCredential());
 ```
 
+## Key concepts
+
+The main concept to understand is [Completions][azure_openai_completions_docs]. Briefly explained, completions provides its functionality in the form of a text prompt, which by using a specific [model](https://learn.microsoft.com/azure/cognitive-services/openai/concepts/models), will then attempt to match the context and patterns, providing an output text. The following code snippet provides a rough overview:
+
+```javascript
+const client = new OpenAIClient(
+        "https://your-azure-openai-resource.com/",
+        new AzureKeyCredential("your-azure-openai-resource-api-key"));
+
+const { id, created, choices, usage } = await client.getCompletions(
+    "text-davinci-003", // assumes a matching model deployment or model name
+    "Hello, world!");
+
+for (const choice of choices)
+{
+    console.log(choice.text);
+}
+```
+
+## Examples
+
+You can familiarize yourself with different APIs using [Samples](https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/openai/openai/samples/v1-beta).
+
+### Generate Chatbot Response
+
+The `GenerateChatbotResponse` method authenticates using a DefaultAzureCredential, then generates text responses to input prompts.
+
+```javascript
+const endpoint = "https://myaccount.openai.azure.com/";
+const client = new OpenAIClient(endpoint, new DefaultAzureCredential());
+
+const deploymentName = "text-davinci-003";
+const prompt = "What is Azure OpenAI?";
+console.log(`Input: ${prompt}`);
+
+const { id, created, choices, usage } = await client.getCompletions(deploymentName, prompt);
+const completion = choices?.[0].text;
+console.log(`Chatbot: ${completion}\n`);
+```
+
 ## Troubleshooting
 
 ### Logging
@@ -85,4 +126,7 @@ For more detailed instructions on how to enable logs, you can look at the [@azur
 
 <!-- LINKS -->
 [msdocs_openai_completion]: https://learn.microsoft.com/azure/cognitive-services/openai/how-to/completions
+[msdocs_openai_chat_completion]: https://learn.microsoft.com/azure/cognitive-services/openai/how-to/chatgpt
 [msdocs_openai_embedding]: https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings
+[azure_openai_completions_docs]: https://learn.microsoft.com/azure/cognitive-services/openai/how-to/completions
+[azure_openai_embeddings_docs]: https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings
