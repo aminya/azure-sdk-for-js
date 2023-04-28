@@ -75,16 +75,15 @@ The main concept to understand is [Completions][azure_openai_completions_docs]. 
 
 ```javascript
 const client = new OpenAIClient(
-        "https://your-azure-openai-resource.com/",
-        new AzureKeyCredential("your-azure-openai-resource-api-key"));
+  "https://your-azure-openai-resource.com/",
+  new AzureKeyCredential("your-azure-openai-resource-api-key"));
 
 const { id, created, choices, usage } = await client.getCompletions(
-    "text-davinci-003", // assumes a matching model deployment or model name
-    "Hello, world!");
+  "text-davinci-003", // assumes a matching model deployment or model name
+  "Hello, world!");
 
-for (const choice of choices)
-{
-    console.log(choice.text);
+for (const choice of choices) {
+  console.log(choice.text);
 }
 ```
 
