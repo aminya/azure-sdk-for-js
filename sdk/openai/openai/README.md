@@ -105,7 +105,74 @@ console.log(`Input: ${prompt}`);
 
 const { id, created, choices, usage } = await client.getCompletions(deploymentName, prompt);
 const completion = choices?.[0].text;
-console.log(`Chatbot: ${completion}\n`);
+console.log(`Chatbot: ${completion}`);
+```
+
+### Generate Multiple Chatbot Responses With Subscription Key
+
+The `GenerateMultipleChatbotResponsesWithSubscriptionKey` method gives an example of generating text responses to input prompts using an Azure subscription key
+
+```javascript
+// Replace with your Azure OpenAI key
+const key = "YOUR_AZURE_OPENAI_KEY";
+const endpoint = "https://myaccount.openai.azure.com/";
+const client = new OpenAIClient(endpoint, new AzureKeyCredential(key));
+
+const examplePrompts = [
+  "How are you today?",
+  "What is Azure OpenAI?",
+  "Why do children love dinosaurs?",
+  "Generate a proof of Euler's identity",
+  "Describe in single words only the good things that come into your mind about your mother.",
+];
+
+const deploymentName = "text-davinci-003";
+
+let promptIndex = 0;
+const { id, created, choices, usage } = await client.getCompletions(deploymentName, examplePrompts);
+for (const choice of choices)
+{
+  console.log(`Input: ${examplesPrompts?.[promptIndex]}`);
+  console.log(`Chatbot: ${choice}`);
+  promptIndex++;
+}
+```
+
+### Summarize Text with Completion
+
+The `SummarizeText` method generates a summarization of the given input prompt.
+
+```javascript
+const endpoint = "https://myaccount.openai.azure.com/";
+const client = new OpenAIClient(endpoint, new DefaultAzureCredential());
+
+const textToSummarize = ` 
+  Two independent experiments reported their results this morning at CERN, Europe's high-energy physics laboratory near Geneva in Switzerland. Both show convincing evidence of a new boson particle weighing around 125 gigaelectronvolts, which so far fits predictions of the Higgs previously made by theoretical physicists.
+
+  ""As a layman I would say: 'I think we have it'. Would you agree?"" Rolf-Dieter Heuer, CERN's director-general, asked the packed auditorium. The physicists assembled there burst into applause.
+ :`;
+
+const summarizationPrompt = ` 
+  Summarize the following text.
+
+  Text:
+  """"""
+  ${textToSummarize}
+  """"""
+
+  Summary:
+`;
+
+console.log(`Input: ${summarizationPrompt}`);
+const completionsOptions = {
+  prompt: summarizationPrompt,
+};
+
+const deploymentName = "text-davinci-003";
+
+const { id, created, choices, usage } = await client.getCompletions(deploymentName, completionsOptions);
+const completion = choices?.[0].text;
+console.log(`Summarization: ${completion}`);
 ```
 
 ## Troubleshooting
