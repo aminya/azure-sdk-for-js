@@ -19,10 +19,10 @@ import {
 import { getSSEs } from "./api/sse.js";
 import { ClientOptions } from "./common/interfaces.js";
 import {
-  getCompletionsResponse,
-  getCompletionsResult,
   getChatCompletionsResponse,
   getChatCompletionsResult,
+  getCompletionsResponse,
+  getCompletionsResult,
 } from "./api/operations.js";
 
 export type CompletionsStream = AsyncIterable<
