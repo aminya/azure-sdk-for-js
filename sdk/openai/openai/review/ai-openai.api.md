@@ -39,6 +39,9 @@ export interface ChatCompletionsOptions {
     user?: string;
 }
 
+// @public (undocumented)
+export type ChatCompletionsStream = AsyncIterable<Omit<DeploymentChatCompletionsOptionsChatCompletions, "usage">>;
+
 // @public
 export interface ChatMessage {
     content?: string;
@@ -89,6 +92,9 @@ export interface CompletionsOptions {
     topP?: number;
     user?: string;
 }
+
+// @public (undocumented)
+export type CompletionsStream = AsyncIterable<Omit<DeploymentCompletionsOptionsCompletions, "usage">>;
 
 // @public
 export interface CompletionsUsage {
@@ -160,6 +166,9 @@ export interface GetChatCompletionsOptions extends RequestOptions {
     user?: string;
 }
 
+// @public (undocumented)
+export type GetChatCompletionsOptionsNoStream = Omit<GetChatCompletionsOptions, "stream">;
+
 // @public
 export function getCompletions(context: OpenAIContext, deploymentId: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
 
@@ -193,6 +202,9 @@ export interface GetCompletionsOptions extends RequestOptions {
     user?: string;
 }
 
+// @public (undocumented)
+export type GetCompletionsOptionsNoStream = Omit<GetCompletionsOptions, "stream">;
+
 // @public
 export function getEmbeddings(context: OpenAIContext, input: string | string[], deploymentId: string, options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
 
@@ -209,21 +221,17 @@ export class OpenAIClient {
     constructor(openAiKey: KeyCredential, options?: ClientOptions);
     constructor(endpoint: string, credential: KeyCredential | TokenCredential, options?: ClientOptions);
     // (undocumented)
-    getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<DeploymentChatCompletionsOptionsChatCompletions>;
-    // Warning: (ae-forgotten-export) The symbol "ChatCompletionsStream" needs to be exported by the entry point index.d.ts
-    //
+    getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptionsNoStream): Promise<DeploymentChatCompletionsOptionsChatCompletions>;
     // (undocumented)
-    getChatCompletionsStreaming(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<ChatCompletionsStream>;
+    getChatCompletionsStreaming(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptionsNoStream): Promise<ChatCompletionsStream>;
     // (undocumented)
-    getCompletions(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
+    getCompletions(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptionsNoStream): Promise<DeploymentCompletionsOptionsCompletions>;
     // (undocumented)
-    getCompletions(deploymentOrModelName: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
-    // Warning: (ae-forgotten-export) The symbol "CompletionsStream" needs to be exported by the entry point index.d.ts
-    //
+    getCompletions(deploymentOrModelName: string, options?: GetCompletionsOptionsNoStream): Promise<DeploymentCompletionsOptionsCompletions>;
     // (undocumented)
-    getCompletionsStreaming(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptions): Promise<CompletionsStream>;
+    getCompletionsStreaming(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptionsNoStream): Promise<CompletionsStream>;
     // (undocumented)
-    getCompletionsStreaming(deploymentOrModelName: string, options?: GetCompletionsOptions): Promise<CompletionsStream>;
+    getCompletionsStreaming(deploymentOrModelName: string, options?: GetCompletionsOptionsNoStream): Promise<CompletionsStream>;
     // (undocumented)
     getEmbeddings(deploymentOrModelName: string, input: string | string[], options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
 }

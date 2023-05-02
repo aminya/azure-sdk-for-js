@@ -4,7 +4,7 @@
  */
 
 import { env, Recorder, RecorderStartOptions, isPlaybackMode } from "@azure-tools/test-recorder";
-import { assert } from "chai";
+import { assert } from "@azure/test-utils";
 import { Context } from "mocha";
 import { OpenAIClient } from "../src/OpenAIClient.js";
 import { AzureKeyCredential } from "@azure/core-auth";

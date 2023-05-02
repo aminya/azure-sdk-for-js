@@ -1,7 +1,13 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-export { OpenAIClient } from "./OpenAIClient.js";
+export {
+  OpenAIClient,
+  ChatCompletionsStream,
+  CompletionsStream,
+  GetCompletionsOptionsNoStream,
+  GetChatCompletionsOptionsNoStream,
+} from "./OpenAIClient.js";
 export {
   ChatChoice,
   ChatCompletionsOptions,

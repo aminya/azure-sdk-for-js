@@ -32,6 +32,10 @@ export type ChatCompletionsStream = AsyncIterable<
   Omit<DeploymentChatCompletionsOptionsChatCompletions, "usage">
 >;
 
+export type GetCompletionsOptionsNoStream = Omit<GetCompletionsOptions, "stream">;
+
+export type GetChatCompletionsOptionsNoStream = Omit<GetChatCompletionsOptions, "stream">;
+
 export class OpenAIClient {
   private _client: OpenAIContext;
   private _isAzure = false;
@@ -112,7 +116,7 @@ export class OpenAIClient {
   getChatCompletions(
     deploymentOrModelName: string,
     messages: ChatMessage[],
-    options: GetChatCompletionsOptions = { requestOptions: {} }
+    options: GetChatCompletionsOptionsNoStream = { requestOptions: {} }
   ): Promise<DeploymentChatCompletionsOptionsChatCompletions> {
     this.setModel(deploymentOrModelName, options);
     return getChatCompletions(this._client, messages, deploymentOrModelName, options);
@@ -121,16 +125,16 @@ export class OpenAIClient {
   getCompletions(
     deploymentOrModelName: string,
     prompt: string | string[],
-    options?: GetCompletionsOptions
+    options?: GetCompletionsOptionsNoStream
   ): Promise<DeploymentCompletionsOptionsCompletions>;
   getCompletions(
     deploymentOrModelName: string,
-    options?: GetCompletionsOptions
+    options?: GetCompletionsOptionsNoStream
   ): Promise<DeploymentCompletionsOptionsCompletions>;
   getCompletions(
     deploymentOrModelName: string,
-    promptOrOptions?: string | string[] | GetCompletionsOptions,
-    options: GetCompletionsOptions = { requestOptions: {} }
+    promptOrOptions?: string | string[] | GetCompletionsOptionsNoStream,
+    options: GetCompletionsOptionsNoStream = { requestOptions: {} }
   ): Promise<DeploymentCompletionsOptionsCompletions> {
     this.setModel(deploymentOrModelName, options);
     return getCompletions(this._client, deploymentOrModelName, promptOrOptions as any, options);
@@ -139,16 +143,16 @@ export class OpenAIClient {
   getCompletionsStreaming(
     deploymentOrModelName: string,
     prompt: string | string[],
-    options?: GetCompletionsOptions
+    options?: GetCompletionsOptionsNoStream
   ): Promise<CompletionsStream>;
   getCompletionsStreaming(
     deploymentOrModelName: string,
-    options?: GetCompletionsOptions
+    options?: GetCompletionsOptionsNoStream
   ): Promise<CompletionsStream>;
   getCompletionsStreaming(
     deploymentOrModelName: string,
-    promptOrOptions?: string | string[] | GetCompletionsOptions,
-    options: GetCompletionsOptions = { requestOptions: {} }
+    promptOrOptions?: string | string[] | GetCompletionsOptionsNoStream,
+    options: GetCompletionsOptionsNoStream = { requestOptions: {} }
   ): Promise<CompletionsStream> {
     this.setModel(deploymentOrModelName, options);
     const opts: GetCompletionsOptions =
@@ -163,10 +167,10 @@ export class OpenAIClient {
   getChatCompletionsStreaming(
     deploymentOrModelName: string,
     messages: ChatMessage[],
-    options: GetChatCompletionsOptions = { requestOptions: {} }
+    options: GetChatCompletionsOptionsNoStream = { requestOptions: {} }
   ): Promise<ChatCompletionsStream> {
     this.setModel(deploymentOrModelName, options);
-    options.stream = true;
+    (options as GetChatCompletionsOptions).stream = true;
     const response = getChatCompletionsResponse(
       this._client,
       messages,
