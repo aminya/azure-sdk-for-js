@@ -18,16 +18,16 @@ export async function getSSEs<TResponse, TEvent>(
     started = true;
     return chunk.split("\n\n").reduce((events, str) => {
       let event: Record<string, any> | undefined;
+      if (str.startsWith("data: ")) {
+        str = str.slice(6);
+      }
+      if (["", "[DONE]", "[DONE]\n"].includes(str)) {
+        return events;
+      }
       if (prevLineIfIncomplete) {
         event = JSON.parse(prevLineIfIncomplete + str);
         prevLineIfIncomplete = "";
       } else {
-        if (chunk.startsWith("data: ")) {
-          str = str.slice(6);
-        }
-        if (["", "[DONE]", "[DONE]\n"].includes(str)) {
-          return events;
-        }
         try {
           event = JSON.parse(str);
         } catch (e) {
