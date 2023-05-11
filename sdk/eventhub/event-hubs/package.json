@@ -124,6 +124,8 @@
     "@azure/eslint-plugin-azure-sdk": "^3.0.0",
     "@azure/identity": "^2.0.1",
     "@azure/mock-hub": "^1.0.0",
+    "@azure/storage-blob": "^12.14.0",
+    "@azure/eventhubs-checkpointstore-blob": "^1.0.0",
     "@azure/test-utils": "^1.0.0",
     "@microsoft/api-extractor": "^7.31.1",
     "@rollup/plugin-commonjs": "^24.0.0",
