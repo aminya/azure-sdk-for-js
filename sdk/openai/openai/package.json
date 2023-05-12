@@ -57,7 +57,7 @@
     "test:node": "npm run clean && tsc -p . && npm run integration-test:node",
     "test": "npm run clean && tsc -p . && npm run unit-test:node && dev-tool run bundle && npm run unit-test:browser && npm run integration-test",
     "unit-test:browser": "karma start karma.conf.cjs --single-run",
-    "unit-test:node": "mocha --exclude  \"test/**/browser/*.spec.ts\" \"test/internal/unit/{,!(browser)/**/}*.spec.ts\" \"test/public/unit/{,!(browser)/**/}*.spec.ts\"",
+    "unit-test:node": "mocha --exclude  \"test/**/browser/*.spec.ts\" \"test/internal/unit/{,!(browser)/**/}*.spec.ts\" \"test/public/{,!(browser)/**/}*.spec.ts\"",
     "unit-test": "npm run unit-test:node && npm run unit-test:browser"
   },
   "files": [
@@ -88,6 +88,7 @@
     "@azure/dev-tool": "^1.0.0",
     "@azure/eslint-plugin-azure-sdk": "^3.0.0",
     "@azure-tools/test-recorder": "^3.0.0",
+    "@azure-tools/test-credential": "^1.0.0",
     "@azure/test-utils": "^1.0.0",
     "@microsoft/api-extractor": "^7.31.1",
     "@rollup/plugin-commonjs": "^24.0.0",

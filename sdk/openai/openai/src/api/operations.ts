@@ -207,15 +207,15 @@ export async function getEmbeddings(
   deploymentId: string,
   options: GetEmbeddingsOptions = { requestOptions: {} }
 ): Promise<DeploymentEmbeddingsOptionsEmbeddings> {
+  const { content_type, requestOptions, accept, ...bodyOptions } = options;
   const result = await context.path("/deployments/{deploymentId}/embeddings", deploymentId).post({
-    contentType: (options.content_type as any) ?? "application/json",
+    contentType: (content_type as any) ?? "application/json",
     headers: {
       Accept: "application/json",
-      ...options.requestOptions?.headers,
+      ...requestOptions?.headers,
     },
     body: {
-      ...(options.user && { user: options.user }),
-      ...(options.model && { model: options.model }),
+      ...bodyOptions,
       input: input,
     },
   });

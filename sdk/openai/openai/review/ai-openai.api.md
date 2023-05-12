@@ -4,6 +4,7 @@
 
 ```ts
 
+import { AzureKeyCredential } from '@azure/core-auth';
 import { Client } from '@azure-rest/core-client';
 import { ClientOptions as ClientOptions_2 } from '@azure-rest/core-client';
 import { ErrorResponse } from '@azure-rest/core-client';
@@ -14,6 +15,8 @@ import { RawHttpHeadersInput } from '@azure/core-rest-pipeline';
 import { RequestParameters } from '@azure-rest/core-client';
 import { StreamableMethod } from '@azure-rest/core-client';
 import { TokenCredential } from '@azure/core-auth';
+
+export { AzureKeyCredential }
 
 // @public
 export interface ChatChoice {
