@@ -7,7 +7,7 @@ import { Recorder, isPlaybackMode } from "@azure-tools/test-recorder";
 import { assert } from "@azure/test-utils";
 import { Context } from "mocha";
 import { OpenAIClient } from "../../src/OpenAIClient.js";
-import { createClient } from "./utils/recordedClient.js";
+import { createClient, startRecorder } from "./utils/recordedClient.js";
 
 export const testPollingOptions = {
   updateIntervalInMs: isPlaybackMode() ? 0 : undefined,
@@ -19,6 +19,7 @@ describe("openaiclient test", () => {
 
   beforeEach(async function (this: Context) {
     recorder = new Recorder(this.currentTest);
+    recorder = await startRecorder(this.currentTest);
     client = createClient("AzureAPIKey", { recorder });
   });
 
