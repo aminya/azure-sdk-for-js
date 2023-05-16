@@ -33,11 +33,18 @@ const { id, created, choices, usage } = await client.getCompletions("<deployment
 
 ### Currently supported environments
 
-- LTS versions of Node.js
+- [LTS versions of Node.js](https://github.com/nodejs/release#release-schedule)
+- Latest versions of Safari, Chrome, Edge, and Firefox.
 
 ### Prerequisites
 
-- You must have an [Azure subscription](https://azure.microsoft.com/free/) to use this package.
+If you'd like to use an Azure OpenAI resource, you must have an [Azure subscription](https://azure.microsoft.com/free/dotnet/)
+and [Azure OpenAI access](https://learn.microsoft.com/azure/cognitive-services/openai/overview#how-do-i-get-access-to-azure-openai).
+This will allow you to create an Azure OpenAI resource and get both a connection URL as well as API keys. For more
+information, see [Quickstart: Get started generating text using Azure OpenAI Service](https://learn.microsoft.com/azure/cognitive-services/openai/quickstart).
+
+If you'd like to use the Azure OpenAI JS client library to connect to non-Azure OpenAI, you'll need an API key
+from a developer account at https://platform.openai.com/.
 
 ### Install the `@azure/ai-openai` package
 
@@ -48,6 +55,11 @@ npm install @azure/ai-openai
 ```
 
 ### Create and authenticate a `OpenAIClient`
+
+To configure a client for use with Azure OpenAI, provide a valid endpoint URI to an Azure OpenAI resource
+along with a corresponding key credential, token credential, or Azure identity credential that's authorized to use the
+Azure OpenAI resource. To instead configure the client to connect to OpenAI's service, provide an API key from OpenAI's
+developer portal.
 
 To use an [Azure Active Directory (AAD) token credential](https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/identity/identity/samples/AzureIdentityExamples.md#authenticating-with-a-pre-fetched-access-token),
 provide an instance of the desired credential type obtained from the
