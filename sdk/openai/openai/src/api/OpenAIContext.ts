@@ -1,8 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { ClientOptions } from "@azure-rest/core-client";
 import { KeyCredential, TokenCredential } from "@azure/core-auth";
-import { ClientOptions } from "../common/interfaces.js";
 import getClient, { OpenAIContext } from "../rest/index.js";
 
 export { OpenAIContext } from "../rest/index.js";

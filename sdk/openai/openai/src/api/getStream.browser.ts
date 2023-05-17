@@ -11,7 +11,6 @@ export async function* getStream<TResponse>(
   const stream = (await response.asBrowserStream()).body;
   if (!stream) throw new Error("No stream found in response");
   const encoder = new TextDecoder();
-  // The cast to any is needed because the ReadableStream type in the browser is shimmed and dom is not imported.
   const reader = (stream as any).getReader();
   while (true) {
     const { value, done } = await reader.read();

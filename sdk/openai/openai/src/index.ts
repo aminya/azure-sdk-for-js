@@ -1,28 +1,27 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-export { AzureKeyCredential } from "@azure/core-auth";
 export {
   OpenAIClient,
   ChatCompletionsStream,
   CompletionsStream,
-  GetCompletionsOptionsNoStream,
   GetChatCompletionsOptionsNoStream,
+  GetCompletionsOptionsNoStream,
 } from "./OpenAIClient.js";
 export {
   ChatChoice,
+  ChatCompletions,
   ChatCompletionsOptions,
   ChatMessage,
   ChatRole,
   Choice,
+  Completions,
   CompletionsFinishReason,
   CompletionsLogProbabilityModel,
   CompletionsOptions,
   CompletionsUsage,
-  DeploymentChatCompletionsOptionsChatCompletions,
-  DeploymentCompletionsOptionsCompletions,
-  DeploymentEmbeddingsOptionsEmbeddings,
   EmbeddingItem,
+  Embeddings,
   EmbeddingsOptions,
   EmbeddingsUsage,
 } from "./api/models.js";
@@ -30,9 +29,6 @@ export {
   GetChatCompletionsOptions,
   GetCompletionsOptions,
   GetEmbeddingsOptions,
-  getChatCompletions,
-  getCompletions,
-  getEmbeddings,
 } from "./api/operations.js";
 export { ClientOptions, RequestOptions } from "./common/interfaces.js";
 export { OpenAIKeyCredential } from "./OpenAIKeyCredential.js";

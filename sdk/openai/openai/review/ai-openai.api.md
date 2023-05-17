@@ -4,26 +4,50 @@
 
 ```ts
 
-import { AzureKeyCredential } from '@azure/core-auth';
-import { Client } from '@azure-rest/core-client';
 import { ClientOptions as ClientOptions_2 } from '@azure-rest/core-client';
-import { ErrorResponse } from '@azure-rest/core-client';
 import { HttpResponse } from '@azure-rest/core-client';
 import { KeyCredential } from '@azure/core-auth';
-import { RawHttpHeaders } from '@azure/core-rest-pipeline';
 import { RawHttpHeadersInput } from '@azure/core-rest-pipeline';
-import { RequestParameters } from '@azure-rest/core-client';
-import { StreamableMethod } from '@azure-rest/core-client';
 import { TokenCredential } from '@azure/core-auth';
-
-export { AzureKeyCredential }
 
 // @public
 export interface ChatChoice {
     delta?: ChatMessage;
-    finishReason: CompletionsFinishReason;
+    finishReason: CompletionsFinishReason | null;
     index: number;
     message?: ChatMessage;
+}
+
+// @public
+export interface ChatCompletions {
+    choices: ChatChoice[];
+    created: number;
+    id: string;
+    usage: CompletionsUsage;
+}
+
+// @public (undocumented)
+export interface ChatCompletions {
+    choices: ChatChoice[];
+    created: number;
+    id: string;
+    usage: CompletionsUsage;
+}
+
+// @public
+export interface ChatCompletionsOptions {
+    frequencyPenalty?: number;
+    logitBias?: Record<string, number>;
+    maxTokens?: number;
+    messages: ChatMessage[];
+    model?: string;
+    n?: number;
+    presencePenalty?: number;
+    stop?: string[];
+    stream?: boolean;
+    temperature?: number;
+    topP?: number;
+    user?: string;
 }
 
 // @public (undocumented)
@@ -43,7 +67,7 @@ export interface ChatCompletionsOptions {
 }
 
 // @public (undocumented)
-export type ChatCompletionsStream = AsyncIterable<Omit<DeploymentChatCompletionsOptionsChatCompletions, "usage">>;
+export type ChatCompletionsStream = AsyncIterable<Omit<ChatCompletions, "usage">>;
 
 // @public
 export interface ChatMessage {
@@ -56,9 +80,9 @@ export type ChatRole = string;
 
 // @public
 export interface Choice {
-    finishReason: CompletionsFinishReason;
+    finishReason: CompletionsFinishReason | null;
     index: number;
-    logprobs?: CompletionsLogProbabilityModel;
+    logprobs: CompletionsLogProbabilityModel | null;
     text: string;
 }
 
@@ -67,14 +91,57 @@ export interface ClientOptions extends ClientOptions_2 {
 }
 
 // @public
+export interface Completions {
+    choices: Choice[];
+    created: number;
+    id: string;
+    usage: CompletionsUsage;
+}
+
+// @public (undocumented)
+export interface Completions {
+    choices: Choice[];
+    created: number;
+    id: string;
+    usage: CompletionsUsage;
+}
+
+// @public
 export type CompletionsFinishReason = string;
 
 // @public
 export interface CompletionsLogProbabilityModel {
-    textOffset?: number[];
-    tokenLogprobs?: number[];
-    tokens?: string[];
-    topLogprobs?: Record<string, number>[];
+    textOffset: number[];
+    tokenLogprobs: (number | null)[];
+    tokens: string[];
+    topLogprobs: Record<string, number | null>[];
+}
+
+// @public
+export interface CompletionsLogProbabilityModel {
+    textOffset: number[];
+    tokenLogprobs: (number | null)[];
+    tokens: string[];
+    topLogprobs: Record<string, number | null>[];
+}
+
+// @public
+export interface CompletionsOptions {
+    bestOf?: number;
+    echo?: boolean;
+    frequencyPenalty?: number;
+    logitBias?: Record<string, number>;
+    logprobs?: number;
+    maxTokens?: number;
+    model?: string;
+    n?: number;
+    presencePenalty?: number;
+    prompt: string[];
+    stop?: string[];
+    stream?: boolean;
+    temperature?: number;
+    topP?: number;
+    user?: string;
 }
 
 // @public (undocumented)
@@ -88,7 +155,7 @@ export interface CompletionsOptions {
     model?: string;
     n?: number;
     presencePenalty?: number;
-    prompt?: string[] | string;
+    prompt: string[];
     stop?: string[];
     stream?: boolean;
     temperature?: number;
@@ -97,7 +164,7 @@ export interface CompletionsOptions {
 }
 
 // @public (undocumented)
-export type CompletionsStream = AsyncIterable<Omit<DeploymentCompletionsOptionsCompletions, "usage">>;
+export type CompletionsStream = AsyncIterable<Omit<Completions, "usage">>;
 
 // @public
 export interface CompletionsUsage {
@@ -106,32 +173,29 @@ export interface CompletionsUsage {
     totalTokens: number;
 }
 
-// @public (undocumented)
-export interface DeploymentChatCompletionsOptionsChatCompletions {
-    choices?: ChatChoice[];
-    created: number;
-    id: string;
-    usage: CompletionsUsage;
+// @public
+export interface EmbeddingItem {
+    embedding: number[];
+    index: number;
+}
+
+// @public
+export interface Embeddings {
+    data: EmbeddingItem[];
+    usage: EmbeddingsUsage;
 }
 
 // @public (undocumented)
-export interface DeploymentCompletionsOptionsCompletions {
-    choices?: Choice[];
-    created: number;
-    id: string;
-    usage: CompletionsUsage;
-}
-
-// @public (undocumented)
-export interface DeploymentEmbeddingsOptionsEmbeddings {
+export interface Embeddings {
     data: EmbeddingItem[];
     usage: EmbeddingsUsage;
 }
 
 // @public
-export interface EmbeddingItem {
-    embedding: number[];
-    index: number;
+export interface EmbeddingsOptions {
+    input: string | string[];
+    model?: string;
+    user?: string;
 }
 
 // @public (undocumented)
@@ -147,15 +211,8 @@ export interface EmbeddingsUsage {
     totalTokens: number;
 }
 
-// Warning: (ae-forgotten-export) The symbol "OpenAIContext" needs to be exported by the entry point index.d.ts
-//
-// @public
-export function getChatCompletions(context: OpenAIContext, messages: ChatMessage[], deploymentId: string, options?: GetChatCompletionsOptions): Promise<DeploymentChatCompletionsOptionsChatCompletions>;
-
 // @public (undocumented)
 export interface GetChatCompletionsOptions extends RequestOptions {
-    accept?: "application/json";
-    content_type?: string;
     frequencyPenalty?: number;
     logitBias?: Record<string, number>;
     maxTokens?: number;
@@ -172,23 +229,9 @@ export interface GetChatCompletionsOptions extends RequestOptions {
 // @public (undocumented)
 export type GetChatCompletionsOptionsNoStream = Omit<GetChatCompletionsOptions, "stream">;
 
-// @public
-export function getCompletions(context: OpenAIContext, deploymentId: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
-
-// @public
-export function getCompletions(context: OpenAIContext, deploymentId: string, prompt: string | string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
-
-// @public
-export function getCompletions(context: OpenAIContext, deploymentId: string, options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
-
-// @public
-export function getCompletions(context: OpenAIContext, deploymentId: string, prompt: string | string[], options?: GetCompletionsOptions): Promise<DeploymentCompletionsOptionsCompletions>;
-
 // @public (undocumented)
 export interface GetCompletionsOptions extends RequestOptions {
-    accept?: "application/json";
     bestOf?: number;
-    content_type?: string;
     echo?: boolean;
     frequencyPenalty?: number;
     logitBias?: Record<string, number>;
@@ -197,7 +240,6 @@ export interface GetCompletionsOptions extends RequestOptions {
     model?: string;
     n?: number;
     presencePenalty?: number;
-    prompt?: string[] | string;
     stop?: string[];
     stream?: boolean;
     temperature?: number;
@@ -208,13 +250,8 @@ export interface GetCompletionsOptions extends RequestOptions {
 // @public (undocumented)
 export type GetCompletionsOptionsNoStream = Omit<GetCompletionsOptions, "stream">;
 
-// @public
-export function getEmbeddings(context: OpenAIContext, input: string | string[], deploymentId: string, options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
-
 // @public (undocumented)
 export interface GetEmbeddingsOptions extends RequestOptions {
-    accept?: "application/json";
-    content_type?: string;
     model?: string;
     user?: string;
 }
@@ -224,19 +261,15 @@ export class OpenAIClient {
     constructor(openAiKey: KeyCredential, options?: ClientOptions);
     constructor(endpoint: string, credential: KeyCredential | TokenCredential, options?: ClientOptions);
     // (undocumented)
-    getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptionsNoStream): Promise<DeploymentChatCompletionsOptionsChatCompletions>;
+    getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptionsNoStream): Promise<ChatCompletions>;
     // (undocumented)
     getChatCompletionsStreaming(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptionsNoStream): Promise<ChatCompletionsStream>;
     // (undocumented)
-    getCompletions(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptionsNoStream): Promise<DeploymentCompletionsOptionsCompletions>;
-    // (undocumented)
-    getCompletions(deploymentOrModelName: string, options?: GetCompletionsOptionsNoStream): Promise<DeploymentCompletionsOptionsCompletions>;
+    getCompletions(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptionsNoStream): Promise<Completions>;
     // (undocumented)
     getCompletionsStreaming(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptionsNoStream): Promise<CompletionsStream>;
     // (undocumented)
-    getCompletionsStreaming(deploymentOrModelName: string, options?: GetCompletionsOptionsNoStream): Promise<CompletionsStream>;
-    // (undocumented)
-    getEmbeddings(deploymentOrModelName: string, input: string | string[], options?: GetEmbeddingsOptions): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
+    getEmbeddings(deploymentOrModelName: string, input: string | string[], options?: GetEmbeddingsOptions): Promise<Embeddings>;
 }
 
 // @public
@@ -251,10 +284,9 @@ export interface RequestOptions {
     // (undocumented)
     requestOptions?: {
         headers?: RawHttpHeadersInput;
-        body?: unknown;
-        queryParameters?: Record<string, unknown>;
         allowInsecureConnection?: boolean;
         skipUrlEncoding?: boolean;
+        onResponse?: (response: HttpResponse) => void;
     };
 }
 

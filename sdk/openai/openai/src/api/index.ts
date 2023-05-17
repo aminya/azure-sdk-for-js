@@ -4,18 +4,18 @@
 export { OpenAIContext, createOpenAI } from "./OpenAIContext.js";
 export {
   ChatChoice,
+  ChatCompletions,
   ChatCompletionsOptions,
   ChatMessage,
   ChatRole,
   Choice,
+  Completions,
   CompletionsFinishReason,
   CompletionsLogProbabilityModel,
   CompletionsOptions,
   CompletionsUsage,
-  DeploymentChatCompletionsOptionsChatCompletions,
-  DeploymentCompletionsOptionsCompletions,
-  DeploymentEmbeddingsOptionsEmbeddings,
   EmbeddingItem,
+  Embeddings,
   EmbeddingsOptions,
   EmbeddingsUsage,
 } from "./models.js";
