@@ -28,7 +28,7 @@ export async function main() {
   const deploymentId = "text-davinci-003";
   const result = await client.getCompletions(deploymentId, prompt);
 
-  for (const choice of result?.choices) {
+  for (const choice of result.choices) {
     console.log(choice.text);
   }
 }
