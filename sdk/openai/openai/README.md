@@ -105,7 +105,7 @@ To instead configure the client to connect to OpenAI's service, provide an API k
 developer portal. Once you have an API key, you can use the `OpenAIKeyCredential` class to authenticate the client as follows:
 
 ```javascript
-const { OpenAIClient, AzureKeyCredential } = require("@azure/ai-openai");
+const { OpenAIClient, OpenAIKeyCredential } = require("@azure/ai-openai");
 
 const client = new OpenAIClient(new OpenAIKeyCredential("<API key>"));
 ```
