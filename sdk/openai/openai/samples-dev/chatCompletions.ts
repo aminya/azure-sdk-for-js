@@ -33,9 +33,6 @@ export async function main() {
   const deploymentId = "gpt-3.5-turbo";
   const result = await client.getChatCompletions(deploymentId, messages);
 
-  if (!result.choices) {
-    throw new Error("Expected choices in the received event");
-  }
   for (const choice of result.choices) {
     console.log(choice.message);
   }

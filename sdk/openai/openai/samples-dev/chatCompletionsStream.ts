@@ -34,9 +34,6 @@ export async function main() {
   const events = await client.getChatCompletionsStreaming(deploymentId, messages);
 
   for await (const event of events) {
-    if (!event.choices) {
-      throw new Error("Expected choices in the received event");
-    }
     for (const choice of event.choices) {
       console.log(choice.delta?.content);
     }

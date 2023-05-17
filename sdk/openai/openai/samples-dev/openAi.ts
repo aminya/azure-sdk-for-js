@@ -27,9 +27,6 @@ export async function main() {
   const model = "text-davinci-003";
   const result = await client.getCompletions(model, prompt);
 
-  if (!result?.choices) {
-    throw new Error("Expected choices in the response");
-  }
   for (const choice of result?.choices) {
     console.log(choice.text);
   }

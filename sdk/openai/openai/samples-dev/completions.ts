@@ -28,9 +28,6 @@ export async function main() {
   const deploymentId = "text-davinci-003";
   const result = await client.getCompletions(deploymentId, prompt);
 
-  if (!result?.choices) {
-    throw new Error("Expected choices in the response");
-  }
   for (const choice of result?.choices) {
     console.log(choice.text);
   }
