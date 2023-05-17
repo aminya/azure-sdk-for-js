@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { ClientOptions as RestClientOptions } from "@azure-rest/core-client";
+import { ClientOptions as RestClientOptions, StreamableMethod } from "@azure-rest/core-client";
 import { RawHttpHeadersInput } from "@azure/core-rest-pipeline";
 import { HttpResponse } from "@azure-rest/core-client";
 
-type PromiseResolvedType<T> = T extends Promise<infer R> ? R : never;
-export type OperationRawReturnType<T extends (...args: any[]) => Promise<any>> =
+type PromiseResolvedType<T> = T extends PromiseLike<infer R> ? R : never;
+export type OperationRawReturnType<T extends (...args: any[]) => StreamableMethod<any>> =
   PromiseResolvedType<ReturnType<T>>;
 
 export interface ClientOptions extends RestClientOptions {}

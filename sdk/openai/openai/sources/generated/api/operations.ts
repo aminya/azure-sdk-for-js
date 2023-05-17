@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { OpenAIContext as Client, isUnexpected } from "../rest/index.js";
+import { OpenAIContext as Client, GetChatCompletions200Response, GetChatCompletionsDefaultResponse, GetCompletions200Response, GetCompletionsDefaultResponse, GetEmbeddings200Response, GetEmbeddingsDefaultResponse, isUnexpected } from "../rest/index.js";
 import {
   OperationRawReturnType,
   RequestOptions,
@@ -12,6 +12,7 @@ import {
   ChatMessage,
   ChatCompletions,
 } from "./models.js";
+import { StreamableMethod } from "@azure-rest/core-client";
 
 export interface GetEmbeddingsOptions extends RequestOptions {
   /**
@@ -27,12 +28,12 @@ export interface GetEmbeddingsOptions extends RequestOptions {
   model?: string;
 }
 
-async function _getEmbeddingsSend(
+export function _getEmbeddingsSend(
   context: Client,
   input: string | string[],
   deploymentId: string,
   options: GetEmbeddingsOptions = { requestOptions: {} }
-) {
+): StreamableMethod<GetEmbeddings200Response | GetEmbeddingsDefaultResponse> {
   return context
     .path("/deployments/{deploymentId}/embeddings", deploymentId)
     .post({
@@ -167,12 +168,12 @@ export interface GetCompletionsOptions extends RequestOptions {
   model?: string;
 }
 
-async function _getCompletionsSend(
+export function _getCompletionsSend(
   context: Client,
   prompt: string[],
   deploymentId: string,
   options: GetCompletionsOptions = { requestOptions: {} }
-) {
+): StreamableMethod<GetCompletions200Response | GetCompletionsDefaultResponse> {
   return context
     .path("/deployments/{deploymentId}/completions", deploymentId)
     .post({
@@ -321,12 +322,12 @@ export interface GetChatCompletionsOptions extends RequestOptions {
   model?: string;
 }
 
-async function _getChatCompletionsSend(
+export function _getChatCompletionsSend(
   context: Client,
   messages: ChatMessage[],
   deploymentId: string,
   options: GetChatCompletionsOptions = { requestOptions: {} }
-) {
+): StreamableMethod<GetChatCompletions200Response | GetChatCompletionsDefaultResponse> {
   return context
     .path("/deployments/{deploymentId}/chat/completions", deploymentId)
     .post({
