@@ -2,21 +2,21 @@
 // Licensed under the MIT license.
 
 export {
-  DeploymentEmbeddingsOptionsEmbeddings,
+  EmbeddingsOptions,
+  Embeddings,
   EmbeddingItem,
   EmbeddingsUsage,
-  EmbeddingsOptions,
-  DeploymentCompletionsOptionsCompletions,
+  CompletionsOptions,
+  Completions,
   Choice,
   CompletionsLogProbabilityModel,
   CompletionsFinishReason,
   CompletionsUsage,
-  CompletionsOptions,
-  DeploymentChatCompletionsOptionsChatCompletions,
-  ChatChoice,
+  ChatCompletionsOptions,
   ChatMessage,
   ChatRole,
-  ChatCompletionsOptions,
+  ChatCompletions,
+  ChatChoice,
 } from "./models.js";
 export { createOpenAI, OpenAIContext } from "./OpenAIContext.js";
 export {

@@ -5,7 +5,7 @@ import { OpenAIContext } from "../rest/index.js";
 import { AzureKeyCredential } from "@azure/core-auth";
 import { TokenCredential } from "@azure/core-auth";
 import getClient from "../rest/index.js";
-import { ClientOptions } from "../common/interfaces.js";
+import { ClientOptions } from "@azure-rest/core-client";
 
 export { OpenAIContext } from "../rest/index.js";
 
