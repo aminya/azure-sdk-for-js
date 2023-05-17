@@ -61,24 +61,53 @@ along with a corresponding key credential, token credential, or Azure identity c
 Azure OpenAI resource. To instead configure the client to connect to OpenAI's service, provide an API key from OpenAI's
 developer portal.
 
-To use an [Azure Active Directory (AAD) token credential](https://github.com/Azure/azure-sdk-for-js/blob/main/sdk/identity/identity/samples/AzureIdentityExamples.md#authenticating-with-a-pre-fetched-access-token),
-provide an instance of the desired credential type obtained from the
-[@azure/identity](https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/identity/identity#credentials) library.
+#### Using an API Key
 
-To authenticate with AAD, you must first `npm` install [`@azure/identity`](https://www.npmjs.com/package/@azure/identity) 
+Use the [Azure Portal][azure_portal] to browse to your OpenAI resource and retrieve an API key, or use the [Azure CLI][azure_cli] snippet below:
 
-After setup, you can choose which type of [credential](https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/identity/identity#credentials) from `@azure/identity` to use.
-As an example, [DefaultAzureCredential](https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/identity/identity#defaultazurecredential)
-can be used to authenticate the client.
+**Note:** Sometimes the API key is referred to as a "subscription key" or "subscription API key."
 
-Set the values of the client ID, tenant ID, and client secret of the AAD application as environment variables:
-AZURE_CLIENT_ID, AZURE_TENANT_ID, AZURE_CLIENT_SECRET
+```PowerShell
+az cognitiveservices account keys list --resource-group <your-resource-group-name> --name <your-resource-name>
+```
 
-```js
-const { OpenAIClient } = require("@azure/ai-openai");
+Once you have an API key and endpoint, you can use the `AzureKeyCredential` class to authenticate the client as follows:
+
+```javascript
+const { TextAnalysisClient, AzureKeyCredential } = require("@azure/ai-openai");
+
+const client = new OpenAIClient("<endpoint>", new AzureKeyCredential("<API key>"));
+```
+
+#### Using an Azure Active Directory Credential
+
+Client API key authentication is used in most of the examples, but you can also authenticate with Azure Active Directory using the [Azure Identity library][azure_identity]. To use the [DefaultAzureCredential][defaultazurecredential] provider shown below,
+or other credential providers provided with the Azure SDK, please install the `@azure/identity` package:
+
+```bash
+npm install @azure/identity
+```
+
+You will also need to [register a new AAD application][register_aad_app] and grant access to OpenAI by assigning the `"Cognitive Services User"` role to your service principal (note: other roles such as `"Owner"` will not grant the necessary permissions, only `"Cognitive Services User"` will suffice to run the examples and the sample code).
+
+Set the values of the client ID, tenant ID, and client secret of the AAD application as environment variables: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_CLIENT_SECRET`.
+
+```javascript
+const { TextAnalysisClient, AzureKeyCredential } = require("@azure/ai-openai");
 const { DefaultAzureCredential } = require("@azure/identity");
 
 const client = new OpenAIClient("<endpoint>", new DefaultAzureCredential());
+```
+
+#### openai.com
+
+To instead configure the client to connect to OpenAI's service, provide an API key from OpenAI's
+developer portal. Once you have an API key, you can use the `OpenAIKeyCredential` class to authenticate the client as follows:
+
+```javascript
+const { TextAnalysisClient, AzureKeyCredential } = require("@azure/ai-openai");
+
+const client = new OpenAIClient(new OpenAIKeyCredential("<API key>"));
 ```
 
 ## Key concepts
@@ -105,7 +134,7 @@ You can familiarize yourself with different APIs using [Samples](https://github.
 
 ### Generate Chatbot Response
 
-The `GenerateChatbotResponse` method authenticates using a DefaultAzureCredential, then generates text responses to input prompts.
+This example authenticates using a DefaultAzureCredential, then generates text responses to input prompts.
 
 ```javascript
 const endpoint = "https://myaccount.openai.azure.com/";
@@ -122,7 +151,7 @@ console.log(`Chatbot: ${completion}`);
 
 ### Generate Multiple Chatbot Responses With Subscription Key
 
-The `GenerateMultipleChatbotResponsesWithSubscriptionKey` method gives an example of generating text responses to input prompts using an Azure subscription key
+This example generates text responses to input prompts using an Azure subscription key
 
 ```javascript
 // Replace with your Azure OpenAI key
@@ -144,7 +173,7 @@ let promptIndex = 0;
 const { id, created, choices, usage } = await client.getCompletions(deploymentName, examplePrompts);
 for (const choice of choices)
 {
-  console.log(`Input: ${examplesPrompts?.[promptIndex]}`);
+  console.log(`Input: ${examplePrompts?.[promptIndex]}`);
   console.log(`Chatbot: ${choice}`);
   promptIndex++;
 }
@@ -152,7 +181,7 @@ for (const choice of choices)
 
 ### Summarize Text with Completion
 
-The `SummarizeText` method generates a summarization of the given input prompt.
+This example generates a summarization of the given input prompt.
 
 ```javascript
 const endpoint = "https://myaccount.openai.azure.com/";
@@ -201,10 +230,13 @@ setLogLevel("info");
 
 For more detailed instructions on how to enable logs, you can look at the [@azure/logger package docs](https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/core/logger).
 
-
 <!-- LINKS -->
 [msdocs_openai_completion]: https://learn.microsoft.com/azure/cognitive-services/openai/how-to/completions
 [msdocs_openai_chat_completion]: https://learn.microsoft.com/azure/cognitive-services/openai/how-to/chatgpt
 [msdocs_openai_embedding]: https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings
 [azure_openai_completions_docs]: https://learn.microsoft.com/azure/cognitive-services/openai/how-to/completions
-[azure_openai_embeddings_docs]: https://learn.microsoft.com/azure/cognitive-services/openai/concepts/understand-embeddings
+[defaultazurecredential]: https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/identity/identity#defaultazurecredential
+[azure_identity]: https://github.com/Azure/azure-sdk-for-js/tree/main/sdk/identity/identity
+[register_aad_app]: https://docs.microsoft.com/azure/cognitive-services/authentication#assign-a-role-to-a-service-principal
+[azure_cli]: https://docs.microsoft.com/cli/azure
+[azure_portal]: https://portal.azure.com
