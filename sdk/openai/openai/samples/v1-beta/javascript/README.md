@@ -13,13 +13,13 @@ urlFragment: ai-openai-javascript-beta
 
 These sample programs show how to use the JavaScript client libraries for Azure OpenAI in some common scenarios.
 
-| **File Name**                                     | **Description**     |
-| ------------------------------------------------- | ------------------- |
-| [chatCompletions.js][chatcompletions]             | test getCompletions |
-| [chatCompletionsStream.js][chatcompletionsstream] | test getCompletions |
-| [completions.js][completions]                     | test getCompletions |
-| [completionsStream.js][completionsstream]         | test getCompletions |
-| [openAi.js][openai]                               | test getCompletions |
+| **File Name**                                     | **Description**                       |
+| ------------------------------------------------- | ------------------------------------- |
+| [chatCompletions.js][chatcompletions]             | get chat completions.                 |
+| [chatCompletionsStream.js][chatcompletionsstream] | stream chat completions.              |
+| [completions.js][completions]                     | get completions.                      |
+| [completionsStream.js][completionsstream]         | stream completions.                   |
+| [openAi.js][openai]                               | get completions using the OpenAI API. |
 
 ## Prerequisites
 
@@ -54,7 +54,7 @@ node chatCompletions.js
 Alternatively, run a single sample with the correct environment variables set (setting up the `.env` file is not required if you do this), for example (cross-platform):
 
 ```bash
-npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" DEPLOYMENT_ID="<deployment id>" node chatCompletions.js
+npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" node chatCompletions.js
 ```
 
 ## Next Steps

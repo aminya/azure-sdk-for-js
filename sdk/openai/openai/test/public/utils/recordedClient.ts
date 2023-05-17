@@ -16,7 +16,7 @@ const envSetupForPlayback: { [k: string]: string } = {
   AZURE_API_KEY: "azure_api_key",
   ENDPOINT: "https://endpoint",
   DEPLOYMENT_ID: "deploymentid",
-  MODEL_NAME: "modelname"
+  MODEL_NAME: "modelname",
 };
 
 const recorderStartOptions: RecorderStartOptions = {
@@ -45,7 +45,11 @@ export function createClient(
       );
     }
     case "OpenAIKey": {
-      return new OpenAIClient(endpoint, new OpenAIKeyCredential(assertEnvironmentVariable("OPENAI_API_KEY")), updatedOptions);
+      return new OpenAIClient(
+        endpoint,
+        new OpenAIKeyCredential(assertEnvironmentVariable("OPENAI_API_KEY")),
+        updatedOptions
+      );
     }
     case "AAD": {
       return new OpenAIClient(endpoint, createTestCredential(), updatedOptions);

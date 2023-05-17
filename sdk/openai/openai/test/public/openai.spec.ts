@@ -34,4 +34,73 @@ describe("openaiclient test", () => {
     assert.isNotNull(completions.choices);
     assert.equal(completions.choices?.length, 1);
   });
+
+  it("stream long completions", async function () {
+    const prompt = `##### Translate this code snippet into Python. Use Azure SDKs where possible.
+\`\`\`
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using System;
+using Azure.Messaging.EventGrid;
+using Azure.Messaging.EventGrid.SystemEvents;
+
+namespace Function1
+{
+    public static class Function1
+    {
+        [FunctionName("Function1")]
+        public static async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+            log.LogInformation("C# HTTP trigger function processed a request.");
+            string response = string.Empty;
+            BinaryData events = await BinaryData.FromStreamAsync(req.Body);
+            log.LogInformation($"Received events: {events}");
+
+            EventGridEvent[] eventGridEvents = EventGridEvent.ParseMany(events);
+
+            foreach (EventGridEvent eventGridEvent in eventGridEvents)
+            {
+                // Handle system events
+                if (eventGridEvent.TryGetSystemEventData(out object eventData))
+                {
+                    // Handle the subscription validation event
+                    if (eventData is SubscriptionValidationEventData subscriptionValidationEventData)
+                    {
+                        log.LogInformation($"Got SubscriptionValidation event data, validation code: {subscriptionValidationEventData.ValidationCode}, topic: {eventGridEvent.Topic}");
+                        // Do any additional validation (as required) and then return back the below response
+                        var responseData = new
+                        {
+                            ValidationResponse = subscriptionValidationEventData.ValidationCode
+                        };
+
+                        return new OkObjectResult(responseData);
+                    }
+                }
+            }
+            return new OkObjectResult(response);
+        }
+    }
+}
+
+\`\`\`
+`;
+    const modelName = "text-davinci-003";
+    const events = await client.getCompletionsStreaming(modelName, prompt, {
+      maxTokens: 2048,
+    });
+    for await (const event of events) {
+      if (!event?.choices) {
+        throw new Error("Expected choices in the response");
+      }
+      for (const choice of event?.choices) {
+        assert.isDefined(choice.text);
+      }
+    }
+  });
 });

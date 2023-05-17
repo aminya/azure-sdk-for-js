@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 /**
- * @summary test getCompletions
+ * Demonstrates how to get completions for a piece of text.
+ *
+ * @summary get completions.
  */
 
 const { OpenAIClient } = require("@azure/ai-openai");
@@ -14,18 +16,22 @@ require("dotenv").config();
 // You will need to set these environment variables or edit the following values
 const endpoint = process.env["ENDPOINT"] || "<endpoint>";
 const azureApiKey = process.env["AZURE_API_KEY"] || "<api key>";
-const deploymentId = process.env["DEPLOYMENT_ID"] || "<deployment id>";
 
-const doc = "Hello world!";
+const prompt = "What is Azure OpenAI?";
 
 async function main() {
   console.log("== Get completions Sample ==");
 
   const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
+  const deploymentId = "text-davinci-003";
+  const result = await client.getCompletions(deploymentId, prompt);
 
-  const result = await client.getCompletions(deploymentId, doc);
-
-  console.log(result?.choices?.[0].text);
+  if (!result?.choices) {
+    throw new Error("Expected choices in the response");
+  }
+  for (const choice of result?.choices) {
+    console.log(choice.text);
+  }
 }
 
 main().catch((err) => {

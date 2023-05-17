@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 /**
- * @summary test getCompletions
+ * Demonstrates how to stream chat completions for a series of messages.
+ *
+ * @summary stream chat completions.
  */
 
 import { OpenAIClient } from "@azure/ai-openai";
@@ -15,18 +17,28 @@ dotenv.config();
 // You will need to set these environment variables or edit the following values
 const endpoint = process.env["ENDPOINT"] || "<endpoint>";
 const azureApiKey = process.env["AZURE_API_KEY"] || "<api key>";
-const deploymentId = process.env["DEPLOYMENT_ID"] || "<deployment id>";
 
-const chat = [{ role: "user", content: "Hello, how are you?" }];
+const messages = [
+  { role: "system", content: "You are a helpful assistant. You will talk like a pirate." },
+  { role: "user", content: "Can you help me?" },
+  { role: "assistant", content: "Arrrr! Of course, me hearty! What can I do for ye?" },
+  { role: "user", content: "What's the best way to train a parrot?" },
+];
 
 export async function main() {
-  console.log("== Get completions Sample ==");
+  console.log("== Streaming Chat Completions Sample ==");
 
   const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
-  const events = await client.getChatCompletionsStreaming(deploymentId, chat);
+  const deploymentId = "gpt-3.5-turbo";
+  const events = await client.getChatCompletionsStreaming(deploymentId, messages);
 
   for await (const event of events) {
-    console.log(event);
+    if (!event.choices) {
+      throw new Error("Expected choices in the received event");
+    }
+    for (const choice of event.choices) {
+      console.log(choice.delta?.content);
+    }
   }
 }
 

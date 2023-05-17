@@ -13,13 +13,13 @@ urlFragment: ai-openai-typescript-beta
 
 These sample programs show how to use the TypeScript client libraries for Azure OpenAI in some common scenarios.
 
-| **File Name**                                     | **Description**     |
-| ------------------------------------------------- | ------------------- |
-| [chatCompletions.ts][chatcompletions]             | test getCompletions |
-| [chatCompletionsStream.ts][chatcompletionsstream] | test getCompletions |
-| [completions.ts][completions]                     | test getCompletions |
-| [completionsStream.ts][completionsstream]         | test getCompletions |
-| [openAi.ts][openai]                               | test getCompletions |
+| **File Name**                                     | **Description**                       |
+| ------------------------------------------------- | ------------------------------------- |
+| [chatCompletions.ts][chatcompletions]             | get chat completions.                 |
+| [chatCompletionsStream.ts][chatcompletionsstream] | stream chat completions.              |
+| [completions.ts][completions]                     | get completions.                      |
+| [completionsStream.ts][completionsstream]         | stream completions.                   |
+| [openAi.ts][openai]                               | get completions using the OpenAI API. |
 
 ## Prerequisites
 
@@ -66,7 +66,7 @@ node dist/chatCompletions.js
 Alternatively, run a single sample with the correct environment variables set (setting up the `.env` file is not required if you do this), for example (cross-platform):
 
 ```bash
-npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" DEPLOYMENT_ID="<deployment id>" node dist/chatCompletions.js
+npx cross-env ENDPOINT="<endpoint>" AZURE_API_KEY="<azure api key>" node dist/chatCompletions.js
 ```
 
 ## Next Steps

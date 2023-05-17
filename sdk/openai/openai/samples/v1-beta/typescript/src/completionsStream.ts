@@ -2,7 +2,9 @@
 // Licensed under the MIT License.
 
 /**
- * @summary test getCompletions
+ * Demonstrates how to stream completions for a piece of text.
+ *
+ * @summary stream completions.
  */
 
 import { OpenAIClient } from "@azure/ai-openai";
@@ -15,18 +17,23 @@ dotenv.config();
 // You will need to set these environment variables or edit the following values
 const endpoint = process.env["ENDPOINT"] || "<endpoint>";
 const azureApiKey = process.env["AZURE_API_KEY"] || "<api key>";
-const deploymentId = process.env["DEPLOYMENT_ID"] || "<deployment id>";
 
-const doc = "Hello world!";
+const prompt = "What is Azure OpenAI?";
 
 export async function main() {
-  console.log("== Get completions Sample ==");
+  console.log("== Stream Completions Sample ==");
 
   const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
-  const events = await client.getCompletionsStreaming(deploymentId, doc);
+  const deploymentId = "text-davinci-003";
+  const events = await client.getCompletionsStreaming(deploymentId, prompt);
 
   for await (const event of events) {
-    console.log(event);
+    if (!event?.choices) {
+      throw new Error("Expected choices in the response");
+    }
+    for (const choice of event?.choices) {
+      console.log(choice.text);
+    }
   }
 }
 
