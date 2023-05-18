@@ -1,17 +1,9 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
+import { TokenCredential, KeyCredential, isTokenCredential } from "@azure/core-auth";
+import { ClientOptions } from "../generated/common/interfaces.js";
 import {
-  TokenCredential,
-  KeyCredential,
-  AzureKeyCredential,
-  isTokenCredential,
-} from "@azure/core-auth";
-import { ClientOptions } from "./common/interfaces.js";
-import {
-  DeploymentEmbeddingsOptionsEmbeddings,
-  DeploymentCompletionsOptionsCompletions,
-  DeploymentChatCompletionsOptionsChatCompletions,
   ChatMessage,
   createOpenAI,
   OpenAIContext,
@@ -21,14 +13,11 @@ import {
   GetEmbeddingsOptions,
   GetCompletionsOptions,
   GetChatCompletionsOptions,
-} from "./api/index.js";
-import {
-  getChatCompletionsResponse,
-  getChatCompletionsResult,
-  getCompletionsResponse,
-  getCompletionsResult,
-} from "./api/operations.js";
+} from "../generated/api/index.js";
+import { getChatCompletionsResult, getCompletionsResult } from "./api/operations.js";
 import { getSSEs } from "./api/sse.js";
+import { ChatCompletions, Completions, Embeddings } from "../generated/api/models.js";
+import { _getChatCompletionsSend, _getCompletionsSend } from "../generated/api/operations.js";
 
 function createOpenAIEndpoint(version: number): string {
   return `https://api.openai.com/v${version}`;
@@ -38,12 +27,8 @@ function isCred(cred: Record<string, any>): cred is TokenCredential | KeyCredent
   return isTokenCredential(cred) || cred.key !== undefined;
 }
 
-export type CompletionsStream = AsyncIterable<
-  Omit<DeploymentCompletionsOptionsCompletions, "usage">
->;
-export type ChatCompletionsStream = AsyncIterable<
-  Omit<DeploymentChatCompletionsOptionsChatCompletions, "usage">
->;
+export type CompletionsStream = AsyncIterable<Omit<Completions, "usage">>;
+export type ChatCompletionsStream = AsyncIterable<Omit<ChatCompletions, "usage">>;
 
 export type GetCompletionsOptionsNoStream = Omit<GetCompletionsOptions, "stream">;
 
@@ -121,12 +106,12 @@ export class OpenAIClient {
     deploymentOrModelName: string,
     input: string | string[],
     options?: GetEmbeddingsOptions
-  ): Promise<DeploymentEmbeddingsOptionsEmbeddings>;
+  ): Promise<Embeddings>;
   getEmbeddings(
     deploymentOrModelName: string,
     input: string | string[],
     options: GetEmbeddingsOptions = { requestOptions: {} }
-  ): Promise<DeploymentEmbeddingsOptionsEmbeddings> {
+  ): Promise<Embeddings> {
     this.setModel(deploymentOrModelName, options);
     return getEmbeddings(this._client, input, deploymentOrModelName, options);
   }
@@ -135,7 +120,7 @@ export class OpenAIClient {
     deploymentOrModelName: string,
     messages: ChatMessage[],
     options: GetChatCompletionsOptionsNoStream = { requestOptions: {} }
-  ): Promise<DeploymentChatCompletionsOptionsChatCompletions> {
+  ): Promise<ChatCompletions> {
     this.setModel(deploymentOrModelName, options);
     return getChatCompletions(this._client, messages, deploymentOrModelName, options);
   }
@@ -143,42 +128,24 @@ export class OpenAIClient {
   getCompletions(
     deploymentOrModelName: string,
     prompt: string | string[],
-    options?: GetCompletionsOptionsNoStream
-  ): Promise<DeploymentCompletionsOptionsCompletions>;
-  getCompletions(
-    deploymentOrModelName: string,
-    options?: GetCompletionsOptionsNoStream
-  ): Promise<DeploymentCompletionsOptionsCompletions>;
-  getCompletions(
-    deploymentOrModelName: string,
-    promptOrOptions?: string | string[] | GetCompletionsOptionsNoStream,
     options: GetCompletionsOptionsNoStream = { requestOptions: {} }
-  ): Promise<DeploymentCompletionsOptionsCompletions> {
+  ): Promise<Completions> {
     this.setModel(deploymentOrModelName, options);
-    return getCompletions(this._client, deploymentOrModelName, promptOrOptions as any, options);
+    return getCompletions(this._client, createPrompt(prompt), deploymentOrModelName, options);
   }
 
   getCompletionsStreaming(
     deploymentOrModelName: string,
     prompt: string | string[],
-    options?: GetCompletionsOptionsNoStream
-  ): Promise<CompletionsStream>;
-  getCompletionsStreaming(
-    deploymentOrModelName: string,
-    options?: GetCompletionsOptionsNoStream
-  ): Promise<CompletionsStream>;
-  getCompletionsStreaming(
-    deploymentOrModelName: string,
-    promptOrOptions?: string | string[] | GetCompletionsOptionsNoStream,
-    options: GetCompletionsOptionsNoStream = { requestOptions: {} }
+    options: GetCompletionsOptionsNoStream = {}
   ): Promise<CompletionsStream> {
     this.setModel(deploymentOrModelName, options);
-    const opts: GetCompletionsOptions =
-      typeof promptOrOptions === "object" && !Array.isArray(promptOrOptions)
-        ? promptOrOptions
-        : { ...options, prompt: promptOrOptions };
-    opts.stream = true;
-    const response = getCompletionsResponse(this._client, deploymentOrModelName, opts);
+    const response = _getCompletionsSend(
+      this._client,
+      createPrompt(prompt),
+      deploymentOrModelName,
+      { ...options, stream: true }
+    );
     return getSSEs(response, getCompletionsResult);
   }
 
@@ -188,13 +155,14 @@ export class OpenAIClient {
     options: GetChatCompletionsOptionsNoStream = { requestOptions: {} }
   ): Promise<ChatCompletionsStream> {
     this.setModel(deploymentOrModelName, options);
-    (options as GetChatCompletionsOptions).stream = true;
-    const response = getChatCompletionsResponse(
-      this._client,
-      messages,
-      deploymentOrModelName,
-      options
-    );
+    const response = _getChatCompletionsSend(this._client, messages, deploymentOrModelName, {
+      ...options,
+      stream: true,
+    });
     return getSSEs(response, getChatCompletionsResult);
   }
+}
+
+function createPrompt(prompt: string | string[]): string[] {
+  return !Array.isArray(prompt) ? [prompt] : prompt;
 }

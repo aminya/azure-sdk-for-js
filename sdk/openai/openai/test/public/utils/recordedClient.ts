@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { AzureKeyCredential, OpenAIClient, OpenAIKeyCredential } from "../../../src/index.js";
+import { OpenAIClient, OpenAIKeyCredential } from "../../../src/index.js";
 import {
   Recorder,
   RecorderStartOptions,
@@ -10,6 +10,7 @@ import {
 import { Test } from "mocha";
 import { createTestCredential } from "@azure-tools/test-credential";
 import { ClientOptions } from "@azure-rest/core-client";
+import { AzureKeyCredential } from "@azure/core-auth";
 
 const envSetupForPlayback: { [k: string]: string } = {
   OPENAI_API_KEY: "openai_api_key",

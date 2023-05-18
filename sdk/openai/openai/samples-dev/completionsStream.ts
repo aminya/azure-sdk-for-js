@@ -29,10 +29,7 @@ export async function main() {
   const events = await client.getCompletionsStreaming(deploymentId, prompt);
 
   for await (const event of events) {
-    if (!event?.choices) {
-      throw new Error("Expected choices in the response");
-    }
-    for (const choice of event?.choices) {
+    for (const choice of event.choices) {
       console.log(choice.text);
     }
   }
