@@ -19,7 +19,7 @@ dotenv.config();
 const endpoint = process.env["ENDPOINT"] || "<endpoint>";
 const azureApiKey = process.env["AZURE_API_KEY"] || "<api key>";
 
-const prompt = "What is Azure OpenAI?";
+const prompt = ["What is Azure OpenAI?"];
 
 export async function main() {
   console.log("== Get completions Sample ==");

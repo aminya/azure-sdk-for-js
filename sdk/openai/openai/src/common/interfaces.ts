@@ -5,9 +5,9 @@ import { ClientOptions as RestClientOptions, StreamableMethod } from "@azure-res
 import { RawHttpHeadersInput } from "@azure/core-rest-pipeline";
 import { HttpResponse } from "@azure-rest/core-client";
 
-type PromiseResolvedType<T> = T extends PromiseLike<infer R> ? R : never;
+type StreamableResolvedType<T> = T extends StreamableMethod<infer R> ? R : never;
 export type OperationRawReturnType<T extends (...args: any[]) => StreamableMethod<any>> =
-  PromiseResolvedType<ReturnType<T>>;
+  StreamableResolvedType<ReturnType<T>>;
 
 export interface ClientOptions extends RestClientOptions {}
 export interface RequestOptions {

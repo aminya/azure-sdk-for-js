@@ -211,44 +211,15 @@ export interface EmbeddingsUsage {
     totalTokens: number;
 }
 
+// Warning: (ae-forgotten-export) The symbol "GetChatCompletionsOptions_2" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export interface GetChatCompletionsOptions extends RequestOptions {
-    frequencyPenalty?: number;
-    logitBias?: Record<string, number>;
-    maxTokens?: number;
-    model?: string;
-    n?: number;
-    presencePenalty?: number;
-    stop?: string[];
-    stream?: boolean;
-    temperature?: number;
-    topP?: number;
-    user?: string;
-}
+export type GetChatCompletionsOptions = Omit<GetChatCompletionsOptions_2, "stream">;
 
+// Warning: (ae-forgotten-export) The symbol "GetCompletionsOptions_2" needs to be exported by the entry point index.d.ts
+//
 // @public (undocumented)
-export type GetChatCompletionsOptionsNoStream = Omit<GetChatCompletionsOptions, "stream">;
-
-// @public (undocumented)
-export interface GetCompletionsOptions extends RequestOptions {
-    bestOf?: number;
-    echo?: boolean;
-    frequencyPenalty?: number;
-    logitBias?: Record<string, number>;
-    logprobs?: number;
-    maxTokens?: number;
-    model?: string;
-    n?: number;
-    presencePenalty?: number;
-    stop?: string[];
-    stream?: boolean;
-    temperature?: number;
-    topP?: number;
-    user?: string;
-}
-
-// @public (undocumented)
-export type GetCompletionsOptionsNoStream = Omit<GetCompletionsOptions, "stream">;
+export type GetCompletionsOptions = Omit<GetCompletionsOptions_2, "stream">;
 
 // @public (undocumented)
 export interface GetEmbeddingsOptions extends RequestOptions {
@@ -261,15 +232,15 @@ export class OpenAIClient {
     constructor(openAiKey: KeyCredential, options?: ClientOptions);
     constructor(endpoint: string, credential: KeyCredential | TokenCredential, options?: ClientOptions);
     // (undocumented)
-    getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptionsNoStream): Promise<ChatCompletions>;
+    getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<ChatCompletions>;
     // (undocumented)
-    getChatCompletionsStreaming(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptionsNoStream): Promise<ChatCompletionsStream>;
+    getChatCompletionsStreaming(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<ChatCompletionsStream>;
     // (undocumented)
-    getCompletions(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptionsNoStream): Promise<Completions>;
+    getCompletions(deploymentOrModelName: string, prompt: string[], options?: GetCompletionsOptions): Promise<Completions>;
     // (undocumented)
-    getCompletionsStreaming(deploymentOrModelName: string, prompt: string | string[], options?: GetCompletionsOptionsNoStream): Promise<CompletionsStream>;
+    getCompletionsStreaming(deploymentOrModelName: string, prompt: string[], options?: GetCompletionsOptions): Promise<CompletionsStream>;
     // (undocumented)
-    getEmbeddings(deploymentOrModelName: string, input: string | string[], options?: GetEmbeddingsOptions): Promise<Embeddings>;
+    getEmbeddings(deploymentOrModelName: string, input: string[], options?: GetEmbeddingsOptions): Promise<Embeddings>;
 }
 
 // @public

@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
+
 /**
  * The configuration information for an embeddings request.
  * Embeddings measure the relatedness of text strings and are commonly used for search, clustering,
@@ -34,11 +35,8 @@ export interface EmbeddingsOptions {
  * provided prompt data.
  */
 export interface CompletionsOptions {
-  /**
-   * The prompts to generate completions from. Defaults to a single prompt of <|endoftext|> if not
-   * otherwise specified.
-   */
-  prompt?: string[] | string;
+  /** The prompts to generate completions from. */
+  prompt: string[];
   /** The maximum number of tokens to generate. */
   max_tokens?: number;
   /**
@@ -169,8 +167,8 @@ export interface ChatCompletionsOptions {
    */
   user?: string;
   /**
-   * The number of completions choices that should be generated per provided prompt as part of an
-   * overall completions response.
+   * The number of chat completions choices that should be generated for a chat completions
+   * response.
    * Because this setting can generate many completions, it may quickly consume your token quota.
    * Use carefully and ensure reasonable settings for max_tokens and stop.
    */

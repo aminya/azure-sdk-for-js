@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 import { ChatCompletions, Completions } from "../../generated/api/models.js";
-import { getCompletions as _getCompletions } from "../../generated/api/operations.js";
 
 // export interface GetCompletionsOptions extends _GetCompletionsOptions {
 //   // @azsdk-remove

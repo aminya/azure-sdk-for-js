@@ -28,7 +28,7 @@ describe("openaiclient test", () => {
   });
 
   it("completions test", async function () {
-    const prompt = "This is a test";
+    const prompt = ["This is a test"];
     const modelName = "text-davinci-003";
     const completions = await client.getCompletions(modelName, prompt);
     assert.isNotNull(completions.choices);
@@ -36,7 +36,8 @@ describe("openaiclient test", () => {
   });
 
   it("stream long completions", async function () {
-    const prompt = `##### Translate this code snippet into Python. Use Azure SDKs where possible.
+    const prompt = [
+      `##### Translate this code snippet into Python. Use Azure SDKs where possible.
 \`\`\`
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -89,7 +90,8 @@ namespace Function1
 }
 
 \`\`\`
-`;
+`,
+    ];
     const modelName = "text-davinci-003";
     const events = await client.getCompletionsStreaming(modelName, prompt, {
       maxTokens: 2048,

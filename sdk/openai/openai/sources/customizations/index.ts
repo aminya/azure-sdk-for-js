@@ -1,38 +1,30 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-export { AzureKeyCredential } from "@azure/core-auth";
-export {
-  DeploymentEmbeddingsOptionsEmbeddings,
-  EmbeddingItem,
-  EmbeddingsUsage,
-  EmbeddingsOptions,
-  DeploymentCompletionsOptionsCompletions,
-  Choice,
-  CompletionsLogProbabilityModel,
-  CompletionsFinishReason,
-  CompletionsUsage,
-  CompletionsOptions,
-  DeploymentChatCompletionsOptionsChatCompletions,
-  ChatChoice,
-  ChatMessage,
-  ChatRole,
-  ChatCompletionsOptions,
-} from "./api/models.js";
-export {
-  getEmbeddings,
-  getCompletions,
-  getChatCompletions,
-  GetEmbeddingsOptions,
-  GetCompletionsOptions,
-  GetChatCompletionsOptions,
-} from "./api/operations.js";
 export {
   OpenAIClient,
   ChatCompletionsStream,
   CompletionsStream,
-  GetCompletionsOptionsNoStream,
-  GetChatCompletionsOptionsNoStream,
+  GetChatCompletionsOptions,
+  GetCompletionsOptions,
 } from "./OpenAIClient.js";
-export { ClientOptions, RequestOptions } from "./common/interfaces.js";
+export {
+  ChatChoice,
+  ChatCompletions,
+  ChatCompletionsOptions,
+  ChatMessage,
+  ChatRole,
+  Choice,
+  Completions,
+  CompletionsFinishReason,
+  CompletionsLogProbabilityModel,
+  CompletionsOptions,
+  CompletionsUsage,
+  EmbeddingItem,
+  Embeddings,
+  EmbeddingsOptions,
+  EmbeddingsUsage,
+} from "../generated/api/models.js";
+export { GetEmbeddingsOptions } from "../generated/api/operations.js";
+export { ClientOptions, RequestOptions } from "../generated/common/interfaces.js";
 export { OpenAIKeyCredential } from "./OpenAIKeyCredential.js";

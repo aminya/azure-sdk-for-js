@@ -1,20 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { Client, StreamableMethod } from "@azure-rest/core-client";
 import {
-  GetChatCompletionsParameters,
-  GetCompletionsParameters,
   GetEmbeddingsParameters,
+  GetCompletionsParameters,
+  GetChatCompletionsParameters,
 } from "./parameters.js";
 import {
-  GetChatCompletions200Response,
-  GetChatCompletionsDefaultResponse,
-  GetCompletions200Response,
-  GetCompletionsDefaultResponse,
   GetEmbeddings200Response,
   GetEmbeddingsDefaultResponse,
+  GetCompletions200Response,
+  GetCompletionsDefaultResponse,
+  GetChatCompletions200Response,
+  GetChatCompletionsDefaultResponse,
 } from "./responses.js";
+import { Client, StreamableMethod } from "@azure-rest/core-client";
 
 export interface GetEmbeddings {
   /** Return the embeddings for a given prompt. */

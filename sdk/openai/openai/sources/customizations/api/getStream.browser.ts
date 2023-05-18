@@ -11,7 +11,7 @@ export async function* getStream<TResponse>(
   const stream = (await response.asBrowserStream()).body;
   if (!stream) throw new Error("No stream found in response");
   const encoder = new TextDecoder();
-  const reader = stream.getReader();
+  const reader = (stream as any).getReader();
   while (true) {
     const { value, done } = await reader.read();
     if (done) {

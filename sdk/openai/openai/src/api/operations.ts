@@ -1,18 +1,8 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT license.
 
-import { StreamableMethod } from "@azure-rest/core-client";
 import { OperationRawReturnType, RequestOptions } from "../common/interfaces.js";
-import {
-  OpenAIContext as Client,
-  GetChatCompletions200Response,
-  GetChatCompletionsDefaultResponse,
-  GetCompletions200Response,
-  GetCompletionsDefaultResponse,
-  GetEmbeddings200Response,
-  GetEmbeddingsDefaultResponse,
-  isUnexpected,
-} from "../rest/index.js";
+import { OpenAIContext as Client, isUnexpected } from "../rest/index.js";
 import { ChatCompletions, ChatMessage, Completions, Embeddings } from "./models.js";
 
 export interface GetEmbeddingsOptions extends RequestOptions {
@@ -185,17 +175,32 @@ export function _getEmbeddingsSend(
   input: string | string[],
   deploymentId: string,
   options: GetEmbeddingsOptions = { requestOptions: {} }
-): StreamableMethod<GetEmbeddings200Response | GetEmbeddingsDefaultResponse> {
+) {
   return context.path("/deployments/{deploymentId}/embeddings", deploymentId).post({
     allowInsecureConnection: options.requestOptions?.allowInsecureConnection,
     skipUrlEncoding: options.requestOptions?.skipUrlEncoding,
     headers: { ...options.requestOptions?.headers },
-    body: {
-      ...(options.user && { user: options.user }),
-      ...(options.model && { model: options.model }),
-      input: input,
-    },
+    body: { user: options?.user, model: options?.model, input: input },
   });
+}
+
+export async function _getEmbeddingsDeserialize(
+  result: OperationRawReturnType<typeof _getEmbeddingsSend>
+): Promise<Embeddings> {
+  if (isUnexpected(result)) {
+    throw result.body;
+  }
+
+  return {
+    data: (result.body["data"] ?? []).map((p) => ({
+      embedding: p["embedding"],
+      index: p["index"],
+    })),
+    usage: {
+      promptTokens: result.body.usage["prompt_tokens"],
+      totalTokens: result.body.usage["total_tokens"],
+    },
+  };
 }
 
 /** Return the embeddings for a given prompt. */
@@ -214,33 +219,61 @@ export function _getCompletionsSend(
   prompt: string[],
   deploymentId: string,
   options: GetCompletionsOptions = { requestOptions: {} }
-): StreamableMethod<GetCompletions200Response | GetCompletionsDefaultResponse> {
+) {
   return context.path("/deployments/{deploymentId}/completions", deploymentId).post({
     allowInsecureConnection: options.requestOptions?.allowInsecureConnection,
     skipUrlEncoding: options.requestOptions?.skipUrlEncoding,
     headers: { ...options.requestOptions?.headers },
     body: {
       prompt: prompt,
-      ...(options.maxTokens && { maxTokens: options.maxTokens }),
-      ...(options.temperature && { temperature: options.temperature }),
-      ...(options.topP && { topP: options.topP }),
-      ...(options.logitBias && { logitBias: options.logitBias }),
-      ...(options.user && { user: options.user }),
-      ...(options.n && { n: options.n }),
-      ...(options.logprobs && { logprobs: options.logprobs }),
-      ...(options.echo && { echo: options.echo }),
-      ...(options.stop && { stop: options.stop }),
-      ...(options.presencePenalty && {
-        presencePenalty: options.presencePenalty,
-      }),
-      ...(options.frequencyPenalty && {
-        frequencyPenalty: options.frequencyPenalty,
-      }),
-      ...(options.bestOf && { bestOf: options.bestOf }),
-      ...(options.stream && { stream: options.stream }),
-      ...(options.model && { model: options.model }),
+      max_tokens: options?.maxTokens,
+      temperature: options?.temperature,
+      top_p: options?.topP,
+      logit_bias: options?.logitBias,
+      user: options?.user,
+      n: options?.n,
+      logprobs: options?.logprobs,
+      echo: options?.echo,
+      stop: options?.stop,
+      presence_penalty: options?.presencePenalty,
+      frequency_penalty: options?.frequencyPenalty,
+      best_of: options?.bestOf,
+      stream: options?.stream,
+      model: options?.model,
     },
   });
+}
+
+export async function _getCompletionsDeserialize(
+  result: OperationRawReturnType<typeof _getCompletionsSend>
+): Promise<Completions> {
+  if (isUnexpected(result)) {
+    throw result.body;
+  }
+
+  return {
+    id: result.body["id"],
+    created: result.body["created"],
+    choices: (result.body["choices"] ?? []).map((p) => ({
+      text: p["text"],
+      index: p["index"],
+      logprobs:
+        p.logprobs === null
+          ? null
+          : {
+              tokens: p.logprobs["tokens"],
+              tokenLogprobs: p.logprobs["token_logprobs"],
+              topLogprobs: p.logprobs["top_logprobs"],
+              textOffset: p.logprobs["text_offset"],
+            },
+      finishReason: p["finish_reason"],
+    })),
+    usage: {
+      completionTokens: result.body.usage["completion_tokens"],
+      promptTokens: result.body.usage["prompt_tokens"],
+      totalTokens: result.body.usage["total_tokens"],
+    },
+  };
 }
 
 /**
@@ -263,30 +296,52 @@ export function _getChatCompletionsSend(
   messages: ChatMessage[],
   deploymentId: string,
   options: GetChatCompletionsOptions = { requestOptions: {} }
-): StreamableMethod<GetChatCompletions200Response | GetChatCompletionsDefaultResponse> {
+) {
   return context.path("/deployments/{deploymentId}/chat/completions", deploymentId).post({
     allowInsecureConnection: options.requestOptions?.allowInsecureConnection,
     skipUrlEncoding: options.requestOptions?.skipUrlEncoding,
     headers: { ...options.requestOptions?.headers },
     body: {
       messages: messages,
-      ...(options.maxTokens && { maxTokens: options.maxTokens }),
-      ...(options.temperature && { temperature: options.temperature }),
-      ...(options.topP && { topP: options.topP }),
-      ...(options.logitBias && { logitBias: options.logitBias }),
-      ...(options.user && { user: options.user }),
-      ...(options.n && { n: options.n }),
-      ...(options.stop && { stop: options.stop }),
-      ...(options.presencePenalty && {
-        presencePenalty: options.presencePenalty,
-      }),
-      ...(options.frequencyPenalty && {
-        frequencyPenalty: options.frequencyPenalty,
-      }),
-      ...(options.stream && { stream: options.stream }),
-      ...(options.model && { model: options.model }),
+      max_tokens: options?.maxTokens,
+      temperature: options?.temperature,
+      top_p: options?.topP,
+      logit_bias: options?.logitBias,
+      user: options?.user,
+      n: options?.n,
+      stop: options?.stop,
+      presence_penalty: options?.presencePenalty,
+      frequency_penalty: options?.frequencyPenalty,
+      stream: options?.stream,
+      model: options?.model,
     },
   });
+}
+
+export async function _getChatCompletionsDeserialize(
+  result: OperationRawReturnType<typeof _getChatCompletionsSend>
+): Promise<ChatCompletions> {
+  if (isUnexpected(result)) {
+    throw result.body;
+  }
+
+  return {
+    id: result.body["id"],
+    created: result.body["created"],
+    choices: (result.body["choices"] ?? []).map((p) => ({
+      message: !p.message
+        ? undefined
+        : { role: p.message?.["role"], content: p.message?.["content"] },
+      index: p["index"],
+      finishReason: p["finish_reason"],
+      delta: !p.delta ? undefined : { role: p.delta?.["role"], content: p.delta?.["content"] },
+    })),
+    usage: {
+      completionTokens: result.body.usage["completion_tokens"],
+      promptTokens: result.body.usage["prompt_tokens"],
+      totalTokens: result.body.usage["total_tokens"],
+    },
+  };
 }
 
 /**
@@ -338,85 +393,5 @@ export function getChatCompletionsResult(
       finishReason: p["finish_reason"],
       delta: !p.delta ? undefined : { role: p.delta?.["role"], content: p.delta?.["content"] },
     })),
-  };
-}
-
-async function _getEmbeddingsDeserialize(
-  result: OperationRawReturnType<typeof _getEmbeddingsSend>
-): Promise<Embeddings> {
-  if (isUnexpected(result)) {
-    throw result.body;
-  }
-
-  return {
-    data: (result.body["data"] ?? []).map((p) => ({
-      embedding: p["embedding"],
-      index: p["index"],
-    })),
-    usage: {
-      promptTokens: result.body.usage["prompt_tokens"],
-      totalTokens: result.body.usage["total_tokens"],
-    },
-  };
-}
-
-async function _getCompletionsDeserialize(
-  result: OperationRawReturnType<typeof _getCompletionsSend>
-): Promise<Completions> {
-  if (isUnexpected(result)) {
-    throw result.body;
-  }
-
-  return {
-    id: result.body["id"],
-    created: result.body["created"],
-    choices: (result.body["choices"] ?? []).map(
-      (p) =>
-        ({
-          text: p["text"],
-          index: p["index"],
-          logprobs:
-            p.logprobs === null
-              ? null
-              : {
-                  tokens: p.logprobs?.["tokens"],
-                  tokenLogprobs: p.logprobs?.["token_logprobs"],
-                  topLogprobs: p.logprobs?.["top_logprobs"],
-                  textOffset: p.logprobs?.["text_offset"],
-                },
-          finishReason: p["finish_reason"],
-        } as any)
-    ),
-    usage: {
-      completionTokens: result.body.usage["completion_tokens"],
-      promptTokens: result.body.usage["prompt_tokens"],
-      totalTokens: result.body.usage["total_tokens"],
-    },
-  };
-}
-
-async function _getChatCompletionsDeserialize(
-  result: OperationRawReturnType<typeof _getChatCompletionsSend>
-): Promise<ChatCompletions> {
-  if (isUnexpected(result)) {
-    throw result.body;
-  }
-
-  return {
-    id: result.body["id"],
-    created: result.body["created"],
-    choices: (result.body["choices"] ?? []).map((p) => ({
-      message: !p.message
-        ? undefined
-        : { role: p.message?.["role"], content: p.message?.["content"] },
-      index: p["index"],
-      finishReason: p["finish_reason"],
-      delta: !p.delta ? undefined : { role: p.delta?.["role"], content: p.delta?.["content"] },
-    })),
-    usage: {
-      completionTokens: result.body.usage["completion_tokens"],
-      promptTokens: result.body.usage["prompt_tokens"],
-      totalTokens: result.body.usage["total_tokens"],
-    },
   };
 }
