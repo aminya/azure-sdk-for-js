@@ -107,7 +107,7 @@ namespace Function1
   });
 
   it("embeddings test", async function () {
-    const prompt = "This is a test";
+    const prompt = ["This is a test"];
     const modelName = "text-similarity-davinci-001";
     const embeddings = await client.getEmbeddings(modelName, prompt);
     assert.isNotNull(embeddings.data);
