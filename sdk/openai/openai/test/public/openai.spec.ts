@@ -103,4 +103,16 @@ namespace Function1
       }
     }
   });
+
+  it("embeddings test", async function () {
+    const prompt = "This is a test";
+    const modelName = "text-similarity-davinci-001";
+    const embeddings = await client.getEmbeddings(modelName, prompt);
+    assert.isNotNull(embeddings.data);
+    assert.equal(embeddings.data.length > 0, true);
+    assert.isNotNull(embeddings.data[0].embedding);
+    assert.equal(embeddings.data[0].embedding.length > 0, true);
+    assert.isNotNull(embeddings.usage);
+  });
+
 });
