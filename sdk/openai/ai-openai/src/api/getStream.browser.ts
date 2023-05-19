@@ -3,7 +3,7 @@
 
 import { StreamableMethod } from "@azure-rest/core-client";
 
-declare var TextDecoder: any;
+declare const TextDecoder: any;
 
 export async function* getStream<TResponse>(
   response: StreamableMethod<TResponse>

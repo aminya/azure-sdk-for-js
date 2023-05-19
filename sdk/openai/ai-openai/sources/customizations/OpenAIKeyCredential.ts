@@ -1,3 +1,6 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
+
 import { KeyCredential } from "@azure/core-auth";
 
 function createKey(key: string): string {

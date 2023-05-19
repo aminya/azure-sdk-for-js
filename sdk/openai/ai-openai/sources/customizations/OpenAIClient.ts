@@ -205,7 +205,7 @@ export class OpenAIClient {
    * Get chat completions for provided chat context messages.
    * @param deploymentOrModelName - The name of the model deployment (when using Azure OpenAI) or model name (when using non-Azure OpenAI) to use for this request.
    * @param messages - The chat context messages to use for this request.
-   * @param options The chat completions options for this completions request.
+   * @param options - The chat completions options for this completions request.
    * @returns The chat completions for the given chat context messages.
    */
   getChatCompletions(

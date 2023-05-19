@@ -382,7 +382,7 @@
     },
     {
       "packageName": "@azure/ai-openai",
-      "projectFolder": "sdk/openai/openai",
+      "projectFolder": "sdk/openai/ai-openai",
       "versionPolicyName": "client"
     },
     {

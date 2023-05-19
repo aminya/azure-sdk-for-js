@@ -1,7 +1,5 @@
-/*
- * Copyright (c) Microsoft Corporation.
- * Licensed under the MIT License.
- */
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT license.
 
 import { Recorder, isPlaybackMode } from "@azure-tools/test-recorder";
 import { assert } from "@azure/test-utils";
@@ -100,7 +98,7 @@ namespace Function1
       if (!event?.choices) {
         throw new Error("Expected choices in the response");
       }
-      for (const choice of event?.choices) {
+      for (const choice of event.choices) {
         assert.isDefined(choice.text);
       }
     }
