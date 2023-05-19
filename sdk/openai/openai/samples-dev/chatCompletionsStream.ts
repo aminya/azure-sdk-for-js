@@ -31,7 +31,7 @@ export async function main() {
 
   const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
   const deploymentId = "gpt-3.5-turbo";
-  const events = await client.getChatCompletionsStreaming(deploymentId, messages);
+  const events = await client.listChatCompletions(deploymentId, messages);
 
   for await (const event of events) {
     for (const choice of event.choices) {

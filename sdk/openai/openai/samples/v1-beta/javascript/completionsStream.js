@@ -24,7 +24,7 @@ async function main() {
 
   const client = new OpenAIClient(endpoint, new AzureKeyCredential(azureApiKey));
   const deploymentId = "text-davinci-003";
-  const events = await client.getCompletionsStreaming(deploymentId, prompt);
+  const events = await client.listCompletions(deploymentId, prompt);
 
   for await (const event of events) {
     if (!event?.choices) {

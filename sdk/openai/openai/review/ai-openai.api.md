@@ -66,9 +66,6 @@ export interface ChatCompletionsOptions {
     user?: string;
 }
 
-// @public (undocumented)
-export type ChatCompletionsStream = AsyncIterable<Omit<ChatCompletions, "usage">>;
-
 // @public
 export interface ChatMessage {
     content?: string;
@@ -163,9 +160,6 @@ export interface CompletionsOptions {
     user?: string;
 }
 
-// @public (undocumented)
-export type CompletionsStream = AsyncIterable<Omit<Completions, "usage">>;
-
 // @public
 export interface CompletionsUsage {
     completionTokens: number;
@@ -211,15 +205,38 @@ export interface EmbeddingsUsage {
     totalTokens: number;
 }
 
-// Warning: (ae-forgotten-export) The symbol "GetChatCompletionsOptions_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
-export type GetChatCompletionsOptions = Omit<GetChatCompletionsOptions_2, "stream">;
+export interface GetChatCompletionsOptions extends RequestOptions {
+    frequencyPenalty?: number;
+    logitBias?: Record<string, number>;
+    maxTokens?: number;
+    model?: string;
+    n?: number;
+    presencePenalty?: number;
+    stop?: string[];
+    stream?: boolean;
+    temperature?: number;
+    topP?: number;
+    user?: string;
+}
 
-// Warning: (ae-forgotten-export) The symbol "GetCompletionsOptions_2" needs to be exported by the entry point index.d.ts
-//
 // @public (undocumented)
-export type GetCompletionsOptions = Omit<GetCompletionsOptions_2, "stream">;
+export interface GetCompletionsOptions extends RequestOptions {
+    bestOf?: number;
+    echo?: boolean;
+    frequencyPenalty?: number;
+    logitBias?: Record<string, number>;
+    logprobs?: number;
+    maxTokens?: number;
+    model?: string;
+    n?: number;
+    presencePenalty?: number;
+    stop?: string[];
+    stream?: boolean;
+    temperature?: number;
+    topP?: number;
+    user?: string;
+}
 
 // @public (undocumented)
 export interface GetEmbeddingsOptions extends RequestOptions {
@@ -229,18 +246,14 @@ export interface GetEmbeddingsOptions extends RequestOptions {
 
 // @public (undocumented)
 export class OpenAIClient {
-    constructor(openAiKey: KeyCredential, options?: ClientOptions);
-    constructor(endpoint: string, credential: KeyCredential | TokenCredential, options?: ClientOptions);
-    // (undocumented)
+    constructor(endpoint: string, credential: KeyCredential, options?: ClientOptions);
+    constructor(endpoint: string, credential: TokenCredential, options?: ClientOptions);
+    constructor(openAiApiKey: KeyCredential, options?: ClientOptions);
     getChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<ChatCompletions>;
-    // (undocumented)
-    getChatCompletionsStreaming(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<ChatCompletionsStream>;
-    // (undocumented)
     getCompletions(deploymentOrModelName: string, prompt: string[], options?: GetCompletionsOptions): Promise<Completions>;
-    // (undocumented)
-    getCompletionsStreaming(deploymentOrModelName: string, prompt: string[], options?: GetCompletionsOptions): Promise<CompletionsStream>;
-    // (undocumented)
     getEmbeddings(deploymentOrModelName: string, input: string[], options?: GetEmbeddingsOptions): Promise<Embeddings>;
+    listChatCompletions(deploymentOrModelName: string, messages: ChatMessage[], options?: GetChatCompletionsOptions): Promise<AsyncIterable<Omit<ChatCompletions, "usage">>>;
+    listCompletions(deploymentOrModelName: string, prompt: string[], options?: GetCompletionsOptions): Promise<AsyncIterable<Omit<Completions, "usage">>>;
 }
 
 // @public

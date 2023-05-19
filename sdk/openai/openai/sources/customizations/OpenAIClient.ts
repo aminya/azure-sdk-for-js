@@ -11,8 +11,8 @@ import {
   getCompletions,
   getChatCompletions,
   GetEmbeddingsOptions,
-  GetCompletionsOptions as GeneratedGetCompletionsOptions,
-  GetChatCompletionsOptions as GeneratedGetChatCompletionsOptions,
+  GetCompletionsOptions,
+  GetChatCompletionsOptions,
 } from "../generated/api/index.js";
 import { getChatCompletionsResult, getCompletionsResult } from "./api/operations.js";
 import { getSSEs } from "./api/sse.js";
@@ -27,24 +27,71 @@ function isCred(cred: Record<string, any>): cred is TokenCredential | KeyCredent
   return isTokenCredential(cred) || cred.key !== undefined;
 }
 
-export type CompletionsStream = AsyncIterable<Omit<Completions, "usage">>;
-export type ChatCompletionsStream = AsyncIterable<Omit<ChatCompletions, "usage">>;
-
-export type GetCompletionsOptions = Omit<GeneratedGetCompletionsOptions, "stream">;
-
-export type GetChatCompletionsOptions = Omit<GeneratedGetChatCompletionsOptions, "stream">;
-
+/**
+ * A client for interacting with Azure OpenAI.
+ *
+ * The client needs the endpoint of an OpenAI resource and an authentication
+ * method such as an API key or token. The API key and endpoint can be found in
+ * the OpenAI resource page. They will be located in the resource's Keys and Endpoint page.
+ *
+ * ### Examples for authentication:
+ *
+ * #### API Key
+ *
+ * ```js
+ * import { OpenAIClient } from "@azure/ai-openai";
+ * import { AzureKeyCredential } from "@azure/core-auth";
+ *
+ * const endpoint = "<azure endpoint>";
+ * const credential = new AzureKeyCredential("<api key>");
+ *
+ * const client = new OpenAIClient(endpoint, credential);
+ * ```
+ *
+ * #### Azure Active Directory
+ *
+ * ```js
+ * import { OpenAIClient } from "@azure/ai-openai";
+ * import { DefaultAzureCredential } from "@azure/identity";
+ *
+ * const endpoint = "<azure endpoint>";
+ * const credential = new DefaultAzureCredential();
+ *
+ * const client = new OpenAIClient(endpoint, credential);
+ * ```
+ */
 export class OpenAIClient {
   private _client: OpenAIContext;
   private _isAzure = false;
 
-  /** Azure OpenAI APIs for completions and search */
-  constructor(openAiKey: KeyCredential, options?: ClientOptions);
-  constructor(
-    endpoint: string,
-    credential: KeyCredential | TokenCredential,
-    options?: ClientOptions
-  );
+  /**
+   * Initializes an instance of OpenAIClient for use with an Azure OpenAI resource.
+   * @param endpoint - The URI for an Azure OpenAI resource, including protocol and hostname.
+   *                 For example: https://my-resource.openai.azure.com.
+   * @param credential - A key credential used to authenticate to an Azure OpenAI resource.
+   * @param options - The options for configuring the client.
+   * @remarks
+   *   This constructor initializes an OpenAIClient object that can only be used with Azure OpenAI resources.
+   *   To use OpenAIClient with a non-Azure OpenAI inference endpoint, use a constructor that accepts a non-Azure OpenAI API key instead.
+   */
+  constructor(endpoint: string, credential: KeyCredential, options?: ClientOptions);
+  /**
+   * Initializes an instance of OpenAIClient for use with an Azure OpenAI resource.
+   * @param endpoint - The URI for an Azure OpenAI resource, including protocol and hostname.
+   *                 For example: https://my-resource.openai.azure.com.
+   * @param credential - A token credential used to authenticate with an Azure OpenAI resource.
+   * @param options - The options for configuring the client.
+   */
+  constructor(endpoint: string, credential: TokenCredential, options?: ClientOptions);
+  /**
+   * Initializes an instance of OpenAIClient for use with the non-Azure OpenAI endpoint.
+   * @param openAiApiKey - The API key to use when connecting to the non-Azure OpenAI endpoint.
+   * @param options - The options for configuring the client.
+   * @remarks
+   *   OpenAIClient objects initialized with this constructor can only be used with the non-Azure OpenAI inference endpoint.
+   *   To use OpenAIClient with an Azure OpenAI resource, use a constructor that accepts a resource URI and Azure authentication credential instead.
+   */
+  constructor(openAiApiKey: KeyCredential, options?: ClientOptions);
   constructor(
     endpointOrOpenAiKey: string | KeyCredential,
     credOrOptions: KeyCredential | TokenCredential | ClientOptions = {},
@@ -102,29 +149,13 @@ export class OpenAIClient {
     }
   }
 
-  getEmbeddings(
-    deploymentOrModelName: string,
-    input: string[],
-    options?: GetEmbeddingsOptions
-  ): Promise<Embeddings>;
-  getEmbeddings(
-    deploymentOrModelName: string,
-    input: string[],
-    options: GetEmbeddingsOptions = { requestOptions: {} }
-  ): Promise<Embeddings> {
-    this.setModel(deploymentOrModelName, options);
-    return getEmbeddings(this._client, input, deploymentOrModelName, options);
-  }
-
-  getChatCompletions(
-    deploymentOrModelName: string,
-    messages: ChatMessage[],
-    options: GetChatCompletionsOptions = { requestOptions: {} }
-  ): Promise<ChatCompletions> {
-    this.setModel(deploymentOrModelName, options);
-    return getChatCompletions(this._client, messages, deploymentOrModelName, options);
-  }
-
+  /**
+   * Returns textual completions as configured for a given prompt.
+   * @param deploymentOrModelName - Specifies either the model deployment name (when using Azure OpenAI) or model name (when using non-Azure OpenAI) to use for this request.
+   * @param prompt - The prompt to use for this request.
+   * @param options - The options for this completions request.
+   * @returns The completions for the given prompt.
+   */
   getCompletions(
     deploymentOrModelName: string,
     prompt: string[],
@@ -134,11 +165,18 @@ export class OpenAIClient {
     return getCompletions(this._client, prompt, deploymentOrModelName, options);
   }
 
-  getCompletionsStreaming(
+  /**
+   * Lists the completions tokens as they become available for a given prompt.
+   * @param deploymentOrModelName - The name of the model deployment (when using Azure OpenAI) or model name (when using non-Azure OpenAI) to use for this request.
+   * @param prompt - The prompt to use for this request.
+   * @param options - The completions options for this completions request.
+   * @returns An asynchronous iterable of completions tokens.
+   */
+  listCompletions(
     deploymentOrModelName: string,
     prompt: string[],
     options: GetCompletionsOptions = {}
-  ): Promise<CompletionsStream> {
+  ): Promise<AsyncIterable<Omit<Completions, "usage">>> {
     this.setModel(deploymentOrModelName, options);
     const response = _getCompletionsSend(this._client, prompt, deploymentOrModelName, {
       ...options,
@@ -147,11 +185,50 @@ export class OpenAIClient {
     return getSSEs(response, getCompletionsResult);
   }
 
-  getChatCompletionsStreaming(
+  /**
+   * Return the computed embeddings for a given prompt.
+   * @param deploymentOrModelName - The name of the model deployment (when using Azure OpenAI) or model name (when using non-Azure OpenAI) to use for this request.
+   * @param input - The prompt to use for this request.
+   * @param options - The embeddings options for this embeddings request.
+   * @returns The embeddings for the given prompt.
+   */
+  getEmbeddings(
+    deploymentOrModelName: string,
+    input: string[],
+    options: GetEmbeddingsOptions = { requestOptions: {} }
+  ): Promise<Embeddings> {
+    this.setModel(deploymentOrModelName, options);
+    return getEmbeddings(this._client, input, deploymentOrModelName, options);
+  }
+
+  /**
+   * Get chat completions for provided chat context messages.
+   * @param deploymentOrModelName - The name of the model deployment (when using Azure OpenAI) or model name (when using non-Azure OpenAI) to use for this request.
+   * @param messages - The chat context messages to use for this request.
+   * @param options The chat completions options for this completions request.
+   * @returns The chat completions for the given chat context messages.
+   */
+  getChatCompletions(
     deploymentOrModelName: string,
     messages: ChatMessage[],
     options: GetChatCompletionsOptions = { requestOptions: {} }
-  ): Promise<ChatCompletionsStream> {
+  ): Promise<ChatCompletions> {
+    this.setModel(deploymentOrModelName, options);
+    return getChatCompletions(this._client, messages, deploymentOrModelName, options);
+  }
+
+  /**
+   * Lists the chat completions tokens as they become available for a chat context.
+   * @param deploymentOrModelName - The name of the model deployment (when using Azure OpenAI) or model name (when using non-Azure OpenAI) to use for this request.
+   * @param messages - The chat context messages to use for this request.
+   * @param options - The chat completions options for this chat completions request.
+   * @returns An asynchronous iterable of chat completions tokens.
+   */
+  listChatCompletions(
+    deploymentOrModelName: string,
+    messages: ChatMessage[],
+    options: GetChatCompletionsOptions = { requestOptions: {} }
+  ): Promise<AsyncIterable<Omit<ChatCompletions, "usage">>> {
     this.setModel(deploymentOrModelName, options);
     const response = _getChatCompletionsSend(this._client, messages, deploymentOrModelName, {
       ...options,

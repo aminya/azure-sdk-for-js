@@ -93,7 +93,7 @@ namespace Function1
 `,
     ];
     const modelName = "text-davinci-003";
-    const events = await client.getCompletionsStreaming(modelName, prompt, {
+    const events = await client.listCompletions(modelName, prompt, {
       maxTokens: 2048,
     });
     for await (const event of events) {
@@ -116,5 +116,4 @@ namespace Function1
     assert.equal(embeddings.data[0].embedding.length > 0, true);
     assert.isNotNull(embeddings.usage);
   });
-
 });

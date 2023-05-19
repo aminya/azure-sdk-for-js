@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 import { ChatCompletions, Completions } from "../../generated/api/models.js";
+import { ChatChoiceOutput, ChoiceOutput } from "../../generated/rest/outputModels.js";
 
 // export interface GetCompletionsOptions extends _GetCompletionsOptions {
 //   // @azsdk-remove
@@ -12,17 +13,18 @@ export function getCompletionsResult(body: Record<string, any>): Omit<Completion
   return {
     id: body["id"],
     created: body["created"],
-    choices: (body["choices"] ?? []).map((p: any) => ({
+    choices: (body["choices"] ?? []).map((p: ChoiceOutput) => ({
       text: p["text"],
       index: p["index"],
-      logprobs: !p.logprobs
-        ? undefined
-        : {
-            tokens: p.logprobs?.["tokens"],
-            tokenLogprobs: p.logprobs?.["token_logprobs"],
-            topLogprobs: p.logprobs?.["top_logprobs"],
-            textOffset: p.logprobs?.["text_offset"],
-          },
+      logprobs:
+        p.logprobs === null
+          ? null
+          : {
+              tokens: p.logprobs["tokens"],
+              tokenLogprobs: p.logprobs["token_logprobs"],
+              topLogprobs: p.logprobs["top_logprobs"],
+              textOffset: p.logprobs["text_offset"],
+            },
       finishReason: p["finish_reason"],
     })),
   };
@@ -34,7 +36,7 @@ export function getChatCompletionsResult(
   return {
     id: body["id"],
     created: body["created"],
-    choices: (body["choices"] ?? []).map((p: any) => ({
+    choices: (body["choices"] ?? []).map((p: ChatChoiceOutput) => ({
       message: !p.message
         ? undefined
         : { role: p.message?.["role"], content: p.message?.["content"] },
