@@ -9,7 +9,7 @@ export async function* getStream<TResponse>(
   response: StreamableMethod<TResponse>
 ): AsyncIterable<string> {
   const stream = (await response.asBrowserStream()).body;
-  if (!stream) throw new Error("No stream found in response");
+  if (!stream) throw new Error("No stream found in response. Did you enable the stream option?");
   const encoder = new TextDecoder();
   const reader = (stream as any).getReader();
   while (true) {

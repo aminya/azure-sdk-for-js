@@ -24,15 +24,11 @@ export async function getSSEs<TResponse, TEvent>(
       if (["", "[DONE]", "[DONE]\n"].includes(str)) {
         return events;
       }
-      if (prevLineIfIncomplete) {
+      try {
         event = JSON.parse(prevLineIfIncomplete + str);
         prevLineIfIncomplete = "";
-      } else {
-        try {
-          event = JSON.parse(str);
-        } catch (e) {
-          prevLineIfIncomplete = str;
-        }
+      } catch (e) {
+        prevLineIfIncomplete += str;
       }
       return event !== undefined ? [...events, toEvent(event)] : events;
     }, [] as TEvent[]);
